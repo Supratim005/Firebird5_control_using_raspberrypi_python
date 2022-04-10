@@ -150,7 +150,7 @@ def back ():
 
 #**********************Stop Starts*********************	
 def stop ():
-	 print("Stopping DC Motors")
+	 #print("Stopping DC Motors")
 	 device_id = 2
 	 device_type = 1
 	 function_type = 4
@@ -192,16 +192,16 @@ def velocity(left_motor,right_motor,mode):
 	for i in range(0,len(data)):
 		if i==4:
 				port.write(bytes([data[i]]))
-				print(bytes([data[i]]))
+				
 		elif i==5:
 				port.write((bytes([(data[i])])))
-				print(bytes([data[i]]))
+				
 		elif i==6:
 				port.write((bytes([(data[i])])))
-				print(bytes([data[i]]))
+				
 		else:
 			port.write((str((data[i]))).encode())
 	
-	print("packet sent is" , (str(data)))
+	#print("packet sent is" , (str(data)))
 	return
 #**********************Velocity Control Ends*********************

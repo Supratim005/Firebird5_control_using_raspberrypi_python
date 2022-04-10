@@ -1,8 +1,46 @@
 import motion as pi 
 import time
+import actuator
+import csv
+import board
+import adafruit_bno055
+import board
+import keyboard
+i2c = board.I2C()
+sensor = adafruit_bno055.BNO055_I2C(i2c)
 
 pi.serial_open()
-x=95
+x=0
+try:
+	while True:
+		print("Euler angle: {}".format(sensor.euler[0]))
+		print("CAL: {}".format(sensor.calibration_status))
+		
+except KeyboardInterrupt:
+    pass
+
+
+
+
+with open('input.csv','r') as csv_file:
+	csv_reader=csv.reader(csv_file)
+	
+	for i in csv_reader:
+		x=x+1
+		print("instance:",x)
+		#actuator.control_ip(float(i[0]),float(i[1]),.05,0.18)
+		#actuator.control_ip(0.05,0.7,.05,0.18)
+		pi.velocity(0,200,1)
+		#time.sleep(1)
+		#pi.stop()
+		time.sleep(0.97)
+		pi.stop()
+		time.sleep(0.05)
+		print("yaw angle: {}".format(sensor.euler[0]))
+		#time.sleep(poll_interval*1.0/1000.0)
+		#time.sleep(1)
+
+'''
 while True:
 		#pi.forward()
 		#time.sleep(2)
@@ -13,15 +51,22 @@ while True:
 		
 		#pi.velocity(0,255)# it's working
 		
-		#pi.velocity(110,110,1)# not working
+		#pi.velocity(255,255,2)# not working
 		#time.sleep(5)
-		pi.velocity(0,x,2)
-		time.sleep(5)
+		#pi.velocity(0,x,2)
+		#actuator.control_ip(0.0152,0.1815,.05,0.18)
+		#time.sleep(1)
 		#pi.velocity(0,0)
 		#time.sleep(3)
-		#pi.velocity(255,255)
-		#time.sleep(3)
+		pi.velocity(200,0,1)
+		time.sleep(1)
+		
+		pi.stop()
 		#pi.stop()
-		#time.sleep(3)
-		x=x+1;
+		time.sleep(1)
+		print("yaw angle: {}".format(sensor.euler[0]))
+		#x=x+1
+		
+'''		
 pi.serial_close()				# close serial portCC
+
