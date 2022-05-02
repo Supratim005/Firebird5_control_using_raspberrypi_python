@@ -6,6 +6,7 @@ import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
+import vehicle
 '''
 import serial
 import io
@@ -303,10 +304,6 @@ if __name__ == '__main__':
             DM2Arr(u[:, 0])
         ))
 
-        print("\nbefore D2Arr:",u[:, 0])
-
-        print("\nafter D2Arr:",DM2Arr(u[:, 0]))
-
 
         t = np.vstack((
             t,
@@ -314,9 +311,11 @@ if __name__ == '__main__':
         ))
 
 
-        t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
+        #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
 
-        print("\nstate_init:",u0.shape)
+
+        t0, state_init, u0 = vehicle.vehicle(step_horizon, t0, state_init, u, f)
+
 
         xx[:,mpc_iter]=state_init.T
 
@@ -335,6 +334,10 @@ if __name__ == '__main__':
         ))
 
         mpc_iter = mpc_iter + 1
+
+        time.sleep(0.5)
+
+
 
     main_loop_time = time()
 
