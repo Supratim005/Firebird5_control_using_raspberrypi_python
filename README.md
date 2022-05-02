@@ -3,3 +3,5 @@
 Used library for MPC: CasADi ( https://web.casadi.org/ )
 
 Installation: https://web.casadi.org/get/
+
+Documentation: https://web.casadi.org/docs/#dm
