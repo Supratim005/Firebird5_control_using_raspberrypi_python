@@ -32,7 +32,7 @@ def bintodec(k,l):
 		
 
  
-def main():
+def position():
 	s = ser.read(26)
 	#for  i in s:
 	s1 =list(map(bin,bytearray(s)))
@@ -48,10 +48,11 @@ def polar(X,Y):
     theta = np.arctan2(y,x)
     print('Polar coordinate is: (radius = %0.2f,theta = %0.2f)' %(radius, theta))
 	
-	
+'''	
 while(1):
-    y,x,z=main()
+    y,x,z=position()
     polar(float(y),float(x)) # need to use this polar mode RTK FIX mode other wise over flow error 
     time.sleep(0.5)
     
 ser.close()
+'''
