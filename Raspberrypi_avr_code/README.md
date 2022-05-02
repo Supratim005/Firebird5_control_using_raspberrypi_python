@@ -5,7 +5,7 @@ Follow every step. Other wise you will face error.
 
 https://www.youtube.com/watch?v=jJ-wY5lSQno&ab_channel=e-Yantra.
 
-If You face "read time error" try to do above procedure 5-6 times. (erase previous farmware before uploading new)
+If You face "read time error" try to do above procedure 5-6 times. (erase previous firmware before uploading new)
 
 Before doing anything kindly check the HW.(# firebird5_hw_check #)
 
