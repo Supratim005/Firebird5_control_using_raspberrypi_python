@@ -319,7 +319,23 @@ void velocity (unsigned char left_motor, unsigned char right_motor,unsigned char
 		OCR5AL = (unsigned char)left_motor;
 		OCR5BL = (unsigned char)right_motor;
 	}
+	
 	else if(mode==2)
+	{
+		PORTA = 0x0A;
+		OCR5AL = (unsigned char)left_motor;
+		OCR5BL = (unsigned char)right_motor;
+		
+	}
+
+	else if(mode==3)
+	{
+		PORTA = 0x05;
+		OCR5AL = (unsigned char)left_motor;
+		OCR5BL = (unsigned char)right_motor;
+	}
+	
+	else if(mode==4)
 	{
 		PORTA = 0x09;
 		OCR5AL = (unsigned char)left_motor;
