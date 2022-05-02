@@ -6,8 +6,25 @@ import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
-from simulation_code import simulate
+#from simulation_code import simulate
+import serial
+import io
+import motion as pi 
+import actuator
+import csv
+import board
+import adafruit_bno055
+import keyboard
+i2c = board.I2C()
+sensor = adafruit_bno055.BNO055_I2C(i2c)
 
+
+ser=serial.Serial('/dev/ttyACM0',19200) # For the GPS
+
+
+
+
+#============================================================================================================================
 
 
 
