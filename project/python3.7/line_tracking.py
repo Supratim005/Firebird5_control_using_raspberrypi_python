@@ -6,6 +6,7 @@ import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
+'''
 import serial
 import io
 import motion as pi 
@@ -15,13 +16,12 @@ import board
 import adafruit_bno055
 import keyboard
 i2c = board.I2C()
-sensor = adafruit_bno055.BNO055_I2C(i2c)
 
+#===========================================================================================================================
+#sensor interface
 
-ser=serial.Serial('/dev/ttyACM0',19200) # For the GPS
-
-
-
+IMU = adafruit_bno055.BNO055_I2C(i2c)
+GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
 
 #============================================================================================================================
 
@@ -33,7 +33,7 @@ ser=serial.Serial('/dev/ttyACM0',19200) # For the GPS
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time = 200      # simulation time
+sim_time = 20      # simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -303,6 +303,11 @@ if __name__ == '__main__':
             DM2Arr(u[:, 0])
         ))
 
+        print("\nbefore D2Arr:",u[:, 0])
+
+        print("\nafter D2Arr:",DM2Arr(u[:, 0]))
+
+
         t = np.vstack((
             t,
             t0
@@ -311,7 +316,7 @@ if __name__ == '__main__':
 
         t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
 
-        print(state_init)
+        print("\nstate_init:",u0.shape)
 
         xx[:,mpc_iter]=state_init.T
 
