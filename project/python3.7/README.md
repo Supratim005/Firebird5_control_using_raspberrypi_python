@@ -2,7 +2,7 @@
 
 line_tracking.py: MPC code for trajectory control
 
-point_tracking.py: MPC code for pont tracking.
+point_tracking.py: MPC code for point tracking.
 
 motion.py: Main interfacing code for rpi with avr microcontroller of FB5.
 
