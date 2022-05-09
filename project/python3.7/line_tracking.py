@@ -35,7 +35,7 @@ GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time = 20      # simulation time
+sim_time = 200      # simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 

@@ -4,8 +4,6 @@ main_loop = time()     # return time in sec
 import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
-import matplotlib.pyplot as plt
-from simulation_code import simulate
 
 # setting matrix_weights' variables
 Q_x = 60
@@ -260,7 +258,3 @@ if __name__ == '__main__':
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
     print('final error: ', ss_error)
     print(state_init)
-
-    # simulate
-    simulate(cat_states, cat_controls, times, step_horizon, N,
-             np.array([x_init, y_init, theta_init, x_target, y_target, theta_target]), save=False)
