@@ -16,12 +16,12 @@ R2=0.18
 
 def vehicle(step_horizon, t0, state_init, u):
     actuator.control_ip(u[0,0],u[1,0],R1,R2)
-    y,x,_ = gps.position()
+    x,y,_ = gps.position()
     h = heading.heading()
 
     next_state = ca.vertcat(
-    ca.horzcat(y), # North
     ca.horzcat(x), # East
+    ca.horzcat(y), # North
     ca.horzcat(h)  # heading angle
 )
 
