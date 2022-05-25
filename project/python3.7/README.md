@@ -10,7 +10,7 @@ actuator.py: Code for converting linear and angular velocity to corresponding PW
 
 gps.py: Code for getting the position of the FB5
 
-used module:pyubx2
+# used module:pyubx2
 [
 Installation:https://pypi.org/project/pyubx2/0.1.0/
 github:https://github.com/semuconsulting/pyubx2
