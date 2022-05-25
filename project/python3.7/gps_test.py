@@ -6,11 +6,12 @@ import numpy as np
 ser=serial.Serial('/dev/ttyACM0',19200)
 
 
-def bintodec(k,l):
+def binarytodecimal(k,l):
 	decimal = 0
 	binary = []
 	for i in range(4):
 		nzeros = 10 - len((k[l-i]))
+		print(nzeros)
 		for j in range(nzeros):
 			binary.append(0)
 		for j in range(len(k[l-i])-2):
@@ -36,17 +37,19 @@ def position():
 	s = ser.read(26)
 	#for  i in s:
 	s1 =list(map(bin,bytearray(s)))
-	N = bintodec(s1,17)
-	E = bintodec(s1,21)
-	D = bintodec(s1,25)
+	N = binarytodecimal(s1,17)
+	E = binarytodecimal(s1,21)
+	D = binarytodecimal(s1,25)
 	print(N,E,D)
 	
-	return N,E,D
+	return E,N,D
 
-def polar(X,Y):
-    radius= np.sqrt(x**x+y**y)
-    theta = np.arctan2(y,x)
-    print('Polar coordinate is: (radius = %0.2f,theta = %0.2f)' %(radius, theta))
+def Distance(X,Y):
+
+	return math.sqrt(E*E+N*N)
+
+
+ser.close()
 	
 '''	
 while(1):
