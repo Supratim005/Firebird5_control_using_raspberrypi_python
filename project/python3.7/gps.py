@@ -20,8 +20,8 @@ def main():
 	N=msg.relPosN
 	D=msg.relPosD
 	Distance=distance(E,N)
-	print(msg.relPosE,msg.relPosN)
-	print(Distance)
+	#print(msg.relPosE,msg.relPosN)
+	#print(Distance)
 	return E,N,Distance
 	ser.close()
 	
