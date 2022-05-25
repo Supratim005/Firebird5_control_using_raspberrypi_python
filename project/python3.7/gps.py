@@ -11,7 +11,7 @@ def distance(E,N):
     return math.sqrt(E*E+N*N)
 
  
-def main():
+def position():
 	ser=serial.Serial('/dev/ttyACM0',115200)
 	ubr = UBXReader(ser, protfilter=2)
 	(raw_data,_)=ubr.read()

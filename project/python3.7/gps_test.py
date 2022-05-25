@@ -44,7 +44,7 @@ def position():
 	
 	return E,N,D
 
-def Distance(X,Y):
+def Distance(E,N):
 
 	return math.sqrt(E*E+N*N)
 
