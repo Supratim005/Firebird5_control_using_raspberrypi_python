@@ -6,7 +6,7 @@ import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
-import vehicle
+#import vehicle
 
 '''
 import serial
@@ -90,6 +90,15 @@ def DM2Arr(dm):
 
 
 # state symbolic variables
+x = ca.SX.sym('x')
+y = ca.SX.sym('y')
+theta = ca.SX.sym('theta')
+states = ca.vertcat(
+    x,
+    y,
+    theta
+)
+n_states = states.numel()
 # control symbolic variables
 v = ca.SX.sym('vpwm_r')
 omega = ca.SX.sym('pwm_l')
@@ -97,16 +106,8 @@ controls = ca.vertcat(
     v,
     omega
 )
-n_states = states.numel()
-
-# control symbolic variables
-v = ca.SX.sym('v')
-omega = ca.SX.sym('omega')
-controls = ca.vertcat(
-    v,
-    omega
-)
 n_controls = controls.numel()
+
 
 # matrix containing all states over all time steps +1 (each column is a state vector)
 X = ca.SX.sym('X', n_states, N + 1)
