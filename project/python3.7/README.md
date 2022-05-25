@@ -9,11 +9,11 @@ motion.py: Main interfacing code for rpi with avr microcontroller of FB5.
 actuator.py: Code for converting linear and angular velocity to corresponding PWM value for FB5 motor.
 
 gps.py: Code for getting the position of the FB5
-used module:pyubx2(
+used module:pyubx2
+[
 Installation:https://pypi.org/project/pyubx2/0.1.0/
 github:https://github.com/semuconsulting/pyubx2
-
-)
+]
 
 heading.py: Code for getting the heading of the FB5
 
