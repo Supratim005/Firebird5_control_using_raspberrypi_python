@@ -6,7 +6,7 @@ import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
-#import vehicle
+import vehicle
 
 '''
 import serial
