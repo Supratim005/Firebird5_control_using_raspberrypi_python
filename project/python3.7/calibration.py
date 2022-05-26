@@ -17,6 +17,5 @@ def calibaration():
 		print("I'm calibarating. Press Enter to stop!")
 		print("X:",x,"Y:",y,"Heading:",h)
 		if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-			line = raw_input()
 			return init_state 
 			break
