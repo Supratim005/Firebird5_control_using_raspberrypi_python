@@ -23,7 +23,7 @@ def vehicle(step_horizon, t0, state_init, u):
     ca.horzcat(x), # East
     ca.horzcat(y), # North
     ca.horzcat(h)  # heading angle
-)
+    )
 
     t0 = t0 + step_horizon
     u0 = ca.horzcat(
