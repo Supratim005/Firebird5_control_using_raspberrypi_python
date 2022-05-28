@@ -9,7 +9,7 @@ import vehicle
 import calibration
 import motion as pi
 
-pi.serial_open()
+pi.serial_open() # To serial access the avr board
 '''
 import serial
 import io
