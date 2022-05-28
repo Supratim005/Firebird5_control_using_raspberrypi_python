@@ -26,3 +26,5 @@ def position():
 	ser.close()
 	
 
+#_,_,y=position()
+#print(y)
