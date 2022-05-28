@@ -22,7 +22,7 @@ heading.py: Code for getting the heading of the FB5
 
 vehicle.py:  I/P and O/P of the system
 
-bno055.py: Code for interfacing bno005 sensor with rpi
+bno055.py: Code for testing bno005 sensor with rpi
 
 Website: https://learn.adafruit.com/bno055-absolute-orientation-sensor-with-raspberry-pi-and-beaglebone-black/software
 
