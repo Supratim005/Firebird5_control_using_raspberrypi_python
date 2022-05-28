@@ -6,11 +6,11 @@ import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
 import vehicle
-
+import calibration
 '''
 import serial
 import io
-import motion as pi 
+import motion as pi
 import actuator
 import csv
 import board
@@ -58,9 +58,6 @@ Q_y = 100
 Q_theta = 30
 R1 = 0.8
 R2 = 0.05
-x_init = 1.10
-y_init = 0.90
-theta_init = pi/4
 v_max = .1; v_min = -v_max;
 omega_max = 1; omega_min = -omega_max;
 
@@ -216,7 +213,7 @@ args = {
 
 #========================================simulation init=======================================================================================================
 t0 = 0
-state_init = ca.DM([x_init, y_init, theta_init])        # initial state
+state_init = calibration.calibration()        # initial state
 
 # xx = DM(state_init)
 t = ca.DM(t0)
@@ -236,8 +233,8 @@ xx=np.zeros([3,int(sim_time/step_horizon)])
 
 if __name__ == '__main__':
 
-    
-    
+
+
     while(mpc_iter * step_horizon < sim_time):
         t1 = time()
 
@@ -256,7 +253,7 @@ if __name__ == '__main__':
 
             theta_ref=theta_target[t_predict]
 
-            u_ref= sqrt( (49*pi**2*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000 ) 
+            u_ref= sqrt( (49*pi**2*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000 )
 
             omega_ref=((49*pow(pi,3)*cos((pi*t_predict)/50)*sin((pi*t_predict)/100))/50000000 - (49*pow(pi,3)*cos((pi*t_predict)/100)*sin((pi*t_predict)/50))/25000000)/((49*pow(pi,2)*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000);
 
@@ -291,7 +288,7 @@ if __name__ == '__main__':
 
         X0 = ca.reshape(sol['x'][: n_states * (N+1)], n_states, N+1)
 
-      
+
 
 
         cat_states = np.dstack((
@@ -349,4 +346,3 @@ if __name__ == '__main__':
     plt.plot(xx[0],xx[1],x_target,y_target)
     plt.show()
 
-    
