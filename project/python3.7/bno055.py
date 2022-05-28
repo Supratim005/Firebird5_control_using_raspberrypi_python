@@ -1,7 +1,6 @@
 import time
 import board
 import adafruit_bno055
-import board
 
 
 

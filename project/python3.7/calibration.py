@@ -4,7 +4,7 @@ import casadi as ca
 import heading
 
 
-def calibaration():
+def calibration():
 	while True:
 		os.system('cls' if os.name == 'nt' else 'clear')
 		x,y,_ = gps.position()

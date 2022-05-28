@@ -6,8 +6,9 @@ import gps
 import casadi as ca
 import heading
 
-i2c = board.I2C()
-imu = adafruit_bno055.BNO055_I2C(i2c)
+
+#i2c = board.I2C()
+#imu = adafruit_bno055.BNO055_I2C(i2c)
 
 R1=0.05
 R2=0.18
