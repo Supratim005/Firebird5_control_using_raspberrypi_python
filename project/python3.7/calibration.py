@@ -2,6 +2,7 @@ import sys, select, os
 import gps
 import casadi as ca
 import heading
+import time
 
 
 def calibration():
@@ -16,6 +17,7 @@ def calibration():
 		)
 		print("I'm calibarating. Press Enter to stop!")
 		print("X:",x,"Y:",y,"Heading:",h)
+		time.sleep(1)
 		if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
 			return init_state 
 			break
