@@ -7,4 +7,4 @@ sensor = adafruit_bno055.BNO055_I2C(i2c)
 
 def heading():
 
-	return sensor.euler[0]
+	return 360-sensor.euler[0]
