@@ -1,5 +1,5 @@
-from time import time
-main_loop = time()     # return time in sec
+import time
+main_loop = time.time()     # return time in sec
 import math
 import casadi as ca
 import numpy as np
@@ -7,6 +7,9 @@ from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
 import vehicle
 import calibration
+import motion as pi
+
+pi.serial_open()
 '''
 import serial
 import io
@@ -213,6 +216,10 @@ args = {
 
 #========================================simulation init=======================================================================================================
 t0 = 0
+#x_init = 1.10
+#y_init = 0.90
+#theta_init=pi/4
+#state_init = ca.DM([x_init, y_init, theta_init]) 
 state_init = calibration.calibration()        # initial state
 
 # xx = DM(state_init)
@@ -236,7 +243,7 @@ if __name__ == '__main__':
 
 
     while(mpc_iter * step_horizon < sim_time):
-        t1 = time()
+        t1 = time.time()
 
         current_time=mpc_iter
 
@@ -324,7 +331,7 @@ if __name__ == '__main__':
         )
 
         # xx ...
-        t2 = time()
+        t2 = time.time()
         times = np.vstack((
             times,
             t2-t1
@@ -332,14 +339,14 @@ if __name__ == '__main__':
 
         mpc_iter = mpc_iter + 1
 
-        time.sleep(0.5)
+        time.sleep(1)
 
 
 
-    main_loop_time = time()
+    main_loop_time = time.time()
 
     #plt.plot()
-
+    pi.serial_close()
     print('\n\n')
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')

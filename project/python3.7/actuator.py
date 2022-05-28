@@ -3,7 +3,6 @@ import math
 
 
 def control_ip(v,w,d,l):
-	
 	#v_r=v+(l/2)*w
 	v_r=(1/d)*(2*v+l*w)
 	v_l=(1/d)*(2*v-l*w)
@@ -33,6 +32,5 @@ def control_ip(v,w,d,l):
 			pwm_r=math.floor((158/3.8)*abs(v_r)+97)
 			pi.velocity(pwm_l,pwm_r,4)
 			print("mode:",4)
-
-
+	
 	
