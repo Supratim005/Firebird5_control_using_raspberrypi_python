@@ -5,7 +5,9 @@ import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
-import vehicle_pwm
+import vehicle
+import motion as pi
+pi.serial_open() # To serial access the avr board
 
 '''
 import serial
@@ -60,9 +62,12 @@ R1 = 0.01
 R2 =0.0001
 r=0.05/2 # radious
 l=0.18 # base length
+'''
+Bellow
 x_init = 1.10
 y_init = 0.90
 theta_init = pi/4
+'''
 pwm_r_max = 255; pwm_r_min= 97;
 pwm_l_max = 247; pwm_l_min = 91;
 
@@ -236,7 +241,11 @@ args = {
 
 #========================================simulation init=======================================================================================================
 t0 = 0
-state_init = ca.DM([x_init, y_init, theta_init])        # initial state
+#x_init = 1.10
+#y_init = 0.90
+#theta_init=pi/4
+#state_init = ca.DM([x_init, y_init, theta_init]) 
+state_init = calibration.calibration()        # initial state
 
 # xx = DM(state_init)
 t = ca.DM(t0)
@@ -337,7 +346,7 @@ if __name__ == '__main__':
         #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
 
 
-        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u)
+        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u, f)
 
 
         xx[:,mpc_iter]=state_init.T
@@ -365,6 +374,7 @@ if __name__ == '__main__':
     main_loop_time = time.time()
 
     #plt.plot()
+    pi.serial_close()
 
     print('\n\n')
     print('Total time: ', main_loop_time - main_loop)
