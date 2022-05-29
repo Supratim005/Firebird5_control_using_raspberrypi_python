@@ -1,6 +1,6 @@
 
-from time import time
-main_loop = time()     # return time in sec
+from time
+main_loop = time.time()     # return time in sec
 import math
 import casadi as ca
 import numpy as np
@@ -64,8 +64,8 @@ l=0.18 # base length
 x_init = 1.10
 y_init = 0.90
 theta_init = pi/4
-pwm_r_max = 255; pwm_r_min= 0;
-pwm_l_max = 255; pwm_l_min = 0;
+pwm_r_max = 255; pwm_r_min= 97;
+pwm_l_max = 247; pwm_l_min = 91;
 
 
 
@@ -73,6 +73,7 @@ pwm_l_max = 255; pwm_l_min = 0;
 
 # restruture the output
 def shift_timestep(step_horizon, t0, state_init, u, f):
+    u=ca.floor(u)
     f_value = f(state_init, u[:, 0])
     next_state = ca.DM.full(state_init + (step_horizon * f_value))
 
@@ -100,7 +101,7 @@ states = ca.vertcat(
 )
 n_states = states.numel()
 # control symbolic variables
-v = ca.SX.sym('vpwm_r')
+v = ca.SX.sym('pwm_r')
 omega = ca.SX.sym('pwm_l')
 controls = ca.vertcat(
     v,
@@ -138,12 +139,22 @@ rl = ca.vertcat(
     ca.horzcat(r/l ,-r/l )
 )
 
-con= 3.8/255 #( 3.8 rad/sec /255)
+#con= 3.8/255 #( 3.8 rad/sec /255)
+con=ca.vertcat(
+    ca.horzcat(4/158),
+    ca.horzcat(4/156)
+)
+
+con1=ca.vertcat(
+    ca.horzcat(97),
+    ca.horzcat(91)
+)
 
 
 
 # Euler discretization
-RHS = phi @ rl @  con @ controls
+#RHS = con*(controls-con1)
+RHS=phi @ (rl@(con * (controls-con1))) # "*: for elementwise @: for matrix"
 
 
 # maps controls from [va, vb, vc, vd].T to [vx, vy, omega].T
@@ -249,7 +260,7 @@ if __name__ == '__main__':
     
     
     while(mpc_iter * step_horizon < sim_time):
-        t1 = time()
+        t1 = time.time()
 
         current_time=mpc_iter
 
@@ -267,12 +278,15 @@ if __name__ == '__main__':
             theta_ref=theta_target[t_predict]
 
             u_ref= sqrt( (49*pi**2*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000 ) 
+            omega_ref=((49*pow(pi,3)*cos((pi*t_predict)/50)*sin((pi*t_predict)/100))/50000000 - (49*pow(pi,3)*cos((pi*t_predict)/100)*sin((pi*t_predict)/50))/25000000)/((49*pow(pi,2)*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000)
 
-            omega_ref=((49*pow(pi,3)*cos((pi*t_predict)/50)*sin((pi*t_predict)/100))/50000000 - (49*pow(pi,3)*cos((pi*t_predict)/100)*sin((pi*t_predict)/50))/25000000)/((49*pow(pi,2)*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000);
+            right_pwm_ref= math.floor((158/4)*((1/(2*r))*(2*u_ref+l*omega_ref))+97) # in pwm
+            left_pwm_ref= math.floor((156/4)*((1/(2*r))*(2*u_ref-l*omega_ref))+91) # in  pwm
+
 
             p[(4*j+k)-1:(4*j+k)+2]=[x_ref, y_ref, theta_ref]
 
-            p[(4*j+k)+2:(4*j+k)+4]=[u_ref, omega_ref]
+            p[(4*j+k)+2:(4*j+k)+4]=[right_pwm_ref, left_pwm_ref]
             j=j+1
 
 
@@ -324,7 +338,7 @@ if __name__ == '__main__':
         #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
 
 
-        t0, state_init, u0 = vehicle.vehicle(step_horizon, t0, state_init, u, f)
+        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u, f)
 
 
         xx[:,mpc_iter]=state_init.T
@@ -337,7 +351,7 @@ if __name__ == '__main__':
         )
 
         # xx ...
-        t2 = time()
+        t2 = time.time()
         times = np.vstack((
             times,
             t2-t1
@@ -349,7 +363,7 @@ if __name__ == '__main__':
 
 
 
-    main_loop_time = time()
+    main_loop_time = time.time()
 
     #plt.plot()
 

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 '''
 import serial
-import io
+import iob
 import motion as pi 
 import actuator
 import csv
@@ -34,7 +34,7 @@ GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
 #==============================================================Simulation variable==========================================================================================================================
 
 step_horizon = 1    #sampling freq
-N = 10              # number of look ahead steps
+N = 10             # number of look ahead steps
 sim_time = 200      # simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
@@ -57,15 +57,15 @@ theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
 Q_x = 60000
 Q_y = 10000
 Q_theta = 30000
-R1 = 0.01
-R2 =0.0001
+R1 = 0.001
+R2 = 0.0001
 r=0.05/2 # radious
 l=0.18 # base length
 x_init = 1.10
 y_init = 0.90
 theta_init = pi/4
-pwm_r_max = 255; pwm_r_min= 0;
-pwm_l_max = 255; pwm_l_min = 0;
+pwm_r_max = 255; pwm_r_min= 97;
+pwm_l_max = 247; pwm_l_min = 91;
 
 
 
@@ -73,6 +73,11 @@ pwm_l_max = 255; pwm_l_min = 0;
 
 # restruture the output
 def shift_timestep(step_horizon, t0, state_init, u, f):
+    u=ca.floor(u)
+    uu=ca.vertcat(
+                    math.floor(u[0,0]),
+                    math.floor(u[1,0])
+                 )
     f_value = f(state_init, u[:, 0])
     next_state = ca.DM.full(state_init + (step_horizon * f_value))
 
@@ -139,12 +144,24 @@ rl = ca.vertcat(
     ca.horzcat(r/l ,-r/l )
 )
 
-con= 3.8/255 #( 3.8 rad/sec /255)
+#con= 3.8/255 #( 3.8 rad/sec /255)
+con=ca.vertcat(
+    ca.horzcat(4/158),
+    ca.horzcat(4/156)
+)
+
+con1=ca.vertcat(
+    ca.horzcat(97),
+    ca.horzcat(91)
+)
 
 
 
 # Euler discretization
-RHS = phi @ rl @  con @ controls
+#RHS = con*(controls-con1)
+RHS=phi @ (rl@(con * (controls-con1)))
+
+print(RHS)
 
 
 # maps controls from [va, vb, vc, vd].T to [vx, vy, omega].T
@@ -235,7 +252,7 @@ t = ca.DM(t0)
 u0 = ca.DM.zeros((n_controls, N))  # initial control
 X0 = ca.repmat(state_init, 1, N+1)         # initial state full
 
-print("0th",X0)
+#print("0th",X0)
 
 
 mpc_iter = 0
@@ -269,13 +286,26 @@ if __name__ == '__main__':
 
             theta_ref=theta_target[t_predict]
 
+            #=======================================under constrion ======================================================
+
+
+
             u_ref= sqrt( (49*pi**2*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000 ) 
 
             omega_ref=((49*pow(pi,3)*cos((pi*t_predict)/50)*sin((pi*t_predict)/100))/50000000 - (49*pow(pi,3)*cos((pi*t_predict)/100)*sin((pi*t_predict)/50))/25000000)/((49*pow(pi,2)*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000);
 
+            
+
+            #op=ri@((co@rh)+co1)
+            
+            right_pwm_ref= math.floor((158/4)*((1/(2*r))*(2*u_ref+l*omega_ref))+97) # in pwm
+            left_pwm_ref= math.floor((156/4)*((1/(2*r))*(2*u_ref-l*omega_ref))+91) # in  
+
+
+
             p[(4*j+k)-1:(4*j+k)+2]=[x_ref, y_ref, theta_ref]
 
-            p[(4*j+k)+2:(4*j+k)+4]=[u_ref, omega_ref]
+            p[(4*j+k)+2:(4*j+k)+4]=[right_pwm_ref, left_pwm_ref]
             j=j+1
 
 
@@ -331,7 +361,9 @@ if __name__ == '__main__':
 
         #t0, state_init, u0 = vehicle.vehicle(step_horizon, t0, state_init, u, f)
 
-        print("state_init:",state_init)
+        #print("state_init:",state_init)
+
+        print(u0[1,0],",",u0[0,0])
 
 
         xx[:,mpc_iter]=state_init.T
@@ -339,14 +371,14 @@ if __name__ == '__main__':
 
 
 
-        print("1st:",X0)
+        #print("1st:",X0)
 
         X0 = ca.horzcat(
             X0[:, 1:],
             ca.reshape(X0[:, -1], -1, 1)
         )
 
-        print("2nd:",X0)
+        #print("2nd:",X0)
 
 
 

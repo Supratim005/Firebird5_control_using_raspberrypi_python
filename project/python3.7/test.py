@@ -10,9 +10,9 @@ i2c = board.I2C()
 sensor = adafruit_bno055.BNO055_I2C(i2c)
 
 pi.serial_open()
-'''
 
-with open('input.csv','r') as csv_file:
+
+with open('pwm.csv','r') as csv_file:
 	csv_reader=csv.reader(csv_file)
 	
 	for i in csv_reader:
@@ -20,13 +20,13 @@ with open('input.csv','r') as csv_file:
 		print("instance:",x)
 		#actuator.control_ip(float(i[0]),float(i[1]),.05,0.18)
 		#actuator.control_ip(0.05,0.7,.05,0.18)
-		pi.velocity(0,200,1)
+		pi.velocity(i[0],i[1],1)
 		#time.sleep(1)
 		#pi.stop()
 		time.sleep(0.97)
 		pi.stop()
-		time.sleep(0.05)
-		print("yaw angle: {}".format(sensor.euler[0]))
+		time.sleep(2)
+		#print("yaw angle: {}".format(sensor.euler[0]))
 		#time.sleep(poll_interval*1.0/1000.0)
 		#time.sleep(1)
 
@@ -57,7 +57,7 @@ while True:
 		time.sleep(1)
 		print("yaw angle: {}".format(sensor.euler[0]))
 		#x=x+1
-		
+'''		
 	
 pi.serial_close()			# close serial portCC
 
