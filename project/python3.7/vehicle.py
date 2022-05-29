@@ -5,6 +5,7 @@ import keyboard
 import gps
 import casadi as ca
 import heading
+import time
 
 
 #i2c = board.I2C()
@@ -17,7 +18,9 @@ R2=0.18
 
 def vehicle(step_horizon, t0, state_init, u):
     actuator.control_ip(u[1,0],u[0,0],R1,R2)
-    #actuator.control_ip(0.0352400516511952,0.329161446487067,R1,R2)
+    time.sleep(0.97)
+    pi.stop()
+    
     x,y,_ = gps.position()
     h = heading.heading()
 
