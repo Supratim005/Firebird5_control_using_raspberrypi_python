@@ -22,7 +22,7 @@ def vehicle(step_horizon, t0, state_init, u,sensor):
     pi.stop()
     
     x,y,_ = gps.position()
-    h = state_init[2]+heading.heading(sensor)
+    h = state_init[2]-heading.heading(sensor)
 
     next_state = ca.vertcat(
     ca.horzcat(x), # East
