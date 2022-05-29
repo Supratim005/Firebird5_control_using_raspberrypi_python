@@ -10,6 +10,7 @@ i2c = board.I2C()
 sensor = adafruit_bno055.BNO055_I2C(i2c)
 
 pi.serial_open()
+x=1
 
 
 with open('pwm.csv','r') as csv_file:
@@ -23,7 +24,7 @@ with open('pwm.csv','r') as csv_file:
 		pi.velocity(i[0],i[1],1)
 		#time.sleep(1)
 		#pi.stop()
-		time.sleep(0.97)
+		time.sleep(1)
 		pi.stop()
 		time.sleep(2)
 		#print("yaw angle: {}".format(sensor.euler[0]))
