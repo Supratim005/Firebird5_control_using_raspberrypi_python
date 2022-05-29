@@ -9,7 +9,7 @@ def calibration():
 	while True:
 		os.system('cls' if os.name == 'nt' else 'clear')
 		x,y,_ = gps.position()
-		h = heading.heading()
+		h = heading.calibration()
 		init_state = ca.vertcat(
 		ca.horzcat(x), # East
 		ca.horzcat(y), # North
