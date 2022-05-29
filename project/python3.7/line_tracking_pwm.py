@@ -6,6 +6,8 @@ import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
 import vehicle_pwm
+import board
+import adafruit_bno055
 import calibration
 import motion as pi
 pi.serial_open() # To serial access the avr board
@@ -248,6 +250,9 @@ t0 = 0
 #state_init = ca.DM([x_init, y_init, theta_init]) 
 state_init = calibration.calibration()        # initial state
 
+i2c = board.I2C()
+sensor = adafruit_bno055.BNO055_I2C(i2c)
+
 # xx = DM(state_init)
 t = ca.DM(t0)
 
@@ -347,7 +352,7 @@ if __name__ == '__main__':
         #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
 
 
-        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u)
+        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u,sensor)
         print("theta:",state_init[2]*(180/pi))
 
 

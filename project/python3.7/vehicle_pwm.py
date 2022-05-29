@@ -6,6 +6,7 @@ import math
 import time
 
 
+
 #i2c = board.I2C()
 #imu = adafruit_bno055.BNO055_I2C(i2c)
 
@@ -14,14 +15,14 @@ R2=0.18
 
 
 
-def vehicle(step_horizon, t0, state_init, u):
+def vehicle(step_horizon, t0, state_init, u,sensor):
     u=ca.floor(u)
     pi.velocity(int(u[1,0]),int(u[0,0]),1)
     time.sleep(0.97)
     pi.stop()
     
     x,y,_ = gps.position()
-    h = state_init[2]+heading.heading()
+    h = state_init[2]+heading.heading(sensor)
 
     next_state = ca.vertcat(
     ca.horzcat(x), # East

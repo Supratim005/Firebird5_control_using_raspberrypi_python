@@ -16,13 +16,13 @@ R2=0.18
 
 
 
-def vehicle(step_horizon, t0, state_init, u):
+def vehicle(step_horizon, t0, state_init, u,sensor):
     actuator.control_ip(u[1,0],u[0,0],R1,R2)
     time.sleep(0.97)
     pi.stop()
     
     x,y,_ = gps.position()
-    h = state_init[2]+heading.heading()
+    h = state_init[2]+heading.heading(sensor)
 
     next_state = ca.vertcat(
     ca.horzcat(x), # East
