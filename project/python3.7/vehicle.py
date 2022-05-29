@@ -16,7 +16,7 @@ R2=0.18
 
 
 
-def vehicle(step_horizon, t0,sensor,theta):
+def vehicle(step_horizon,t0,u,sensor,theta):
     actuator.control_ip(u[1,0],u[0,0],R1,R2)
     time.sleep(0.97)
     pi.stop()
