@@ -1,5 +1,4 @@
-
-from time
+import time
 main_loop = time.time()     # return time in sec
 import math
 import casadi as ca
@@ -54,9 +53,9 @@ theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
 
 #============================================================Sytem variables========================================================================================================================
 # setting matrix_weights' variables
-Q_x = 60000
-Q_y = 10000
-Q_theta = 30000
+Q_x = 6000
+Q_y = 1000
+Q_theta = 3000
 R1 = 0.01
 R2 =0.0001
 r=0.05/2 # radious
