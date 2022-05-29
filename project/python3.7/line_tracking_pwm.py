@@ -5,7 +5,7 @@ import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
-import vehicle
+import vehicle_pwm
 
 '''
 import serial
@@ -337,7 +337,7 @@ if __name__ == '__main__':
         #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
 
 
-        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u, f)
+        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u)
 
 
         xx[:,mpc_iter]=state_init.T
