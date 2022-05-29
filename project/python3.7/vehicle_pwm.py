@@ -15,7 +15,7 @@ R2=0.18
 
 def vehicle(step_horizon, t0, state_init, u):
     u=ca.floor(u)
-    pi.velocity(u[1,0],u[0,0],1)
+    pi.velocity(int(u[1,0]),int(u[0,0]),1)
     #actuator.control_ip(0.0352400516511952,0.329161446487067,R1,R2)
     x,y,_ = gps.position()
     h = heading.heading()
