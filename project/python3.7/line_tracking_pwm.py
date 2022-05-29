@@ -348,6 +348,7 @@ if __name__ == '__main__':
 
 
         t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u)
+        print("theta:",state_init[2]*(180/pi))
 
 
         xx[:,mpc_iter]=state_init.T

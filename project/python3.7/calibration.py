@@ -16,7 +16,7 @@ def calibration():
 		ca.horzcat(h)  # heading angle
 		)
 		print("I'm calibarating. Press Enter to stop!")
-		print("X:",x,"Y:",y,"Heading:",h)
+		print("X:",x,"Y:",y,"Heading:",h*(1260/22))
 		time.sleep(1)
 		if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
 			return init_state 
