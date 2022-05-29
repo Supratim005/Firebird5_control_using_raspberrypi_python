@@ -5,7 +5,8 @@ import casadi as ca
 import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
-import vehicle
+import vehicle_pwm
+import calibration
 import motion as pi
 pi.serial_open() # To serial access the avr board
 
@@ -241,11 +242,11 @@ args = {
 
 #========================================simulation init=======================================================================================================
 t0 = 0
-#x_init = 1.10
-#y_init = 0.90
-#theta_init=pi/4
-#state_init = ca.DM([x_init, y_init, theta_init]) 
-state_init = calibration.calibration()        # initial state
+x_init = 1.10
+y_init = 0.90
+theta_init=pi/4
+state_init = ca.DM([x_init, y_init, theta_init]) 
+#state_init = calibration.calibration()        # initial state
 
 # xx = DM(state_init)
 t = ca.DM(t0)
@@ -346,7 +347,7 @@ if __name__ == '__main__':
         #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
 
 
-        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u, f)
+        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u)
 
 
         xx[:,mpc_iter]=state_init.T
