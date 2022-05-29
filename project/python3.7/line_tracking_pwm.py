@@ -242,11 +242,11 @@ args = {
 
 #========================================simulation init=======================================================================================================
 t0 = 0
-x_init = 1.10
-y_init = 0.90
-theta_init=pi/4
-state_init = ca.DM([x_init, y_init, theta_init]) 
-#state_init = calibration.calibration()        # initial state
+#x_init = 1.10
+#y_init = 0.90
+#theta_init=pi/4
+#state_init = ca.DM([x_init, y_init, theta_init]) 
+state_init = calibration.calibration()        # initial state
 
 # xx = DM(state_init)
 t = ca.DM(t0)
