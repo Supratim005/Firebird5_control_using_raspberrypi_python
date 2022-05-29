@@ -221,6 +221,7 @@ t0 = 0
 #theta_init=pi/4
 #state_init = ca.DM([x_init, y_init, theta_init]) 
 state_init = calibration.calibration()        # initial state
+theta_init=state_init[2]
 
 # xx = DM(state_init)
 t = ca.DM(t0)
@@ -319,6 +320,7 @@ if __name__ == '__main__':
 
 
         t0, state_init, u0 = vehicle.vehicle(step_horizon, t0, state_init, u)
+        print("theta:",state_init[2]*(180/pi))
 
 
         xx[:,mpc_iter]=state_init.T
