@@ -339,8 +339,6 @@ if __name__ == '__main__':
 
         mpc_iter = mpc_iter + 1
 
-        time.sleep(1)
-
 
 
     main_loop_time = time.time()
