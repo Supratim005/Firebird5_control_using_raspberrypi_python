@@ -21,7 +21,7 @@ with open('pwm.csv','r') as csv_file:
 		print("instance:",x)
 		#actuator.control_ip(float(i[0]),float(i[1]),.05,0.18)
 		#actuator.control_ip(0.05,0.7,.05,0.18)
-		pi.velocity(i[0],i[1],1)
+		pi.velocity(int(i[0]),int(i[1]),1)
 		#time.sleep(1)
 		#pi.stop()
 		time.sleep(1)
