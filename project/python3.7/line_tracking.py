@@ -6,6 +6,8 @@ import numpy as np
 from casadi import sin, cos, pi
 import matplotlib.pyplot as plt
 import vehicle
+import board
+import adafruit_bno055
 import calibration
 import motion as pi
 
@@ -222,6 +224,9 @@ t0 = 0
 #state_init = ca.DM([x_init, y_init, theta_init]) 
 state_init = calibration.calibration()        # initial state
 theta_init=state_init[2]
+
+i2c = board.I2C()
+sensor = adafruit_bno055.BNO055_I2C(i2c)
 
 # xx = DM(state_init)
 t = ca.DM(t0)
