@@ -249,6 +249,7 @@ t0 = 0
 #theta_init=pi/4
 #state_init = ca.DM([x_init, y_init, theta_init]) 
 state_init = calibration.calibration()        # initial state
+theta_init=state_init[2]
 
 i2c = board.I2C()
 sensor = adafruit_bno055.BNO055_I2C(i2c)
@@ -352,7 +353,7 @@ if __name__ == '__main__':
         #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
 
 
-        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, state_init, u,sensor)
+        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, u,sensor,theta_init)
         print("theta:",state_init[2]*(180/pi))
 
 

@@ -15,14 +15,14 @@ R2=0.18
 
 
 
-def vehicle(step_horizon, t0, state_init, u,sensor):
+def vehicle(step_horizon, t0, u,sensor,theta):
     u=ca.floor(u)
     pi.velocity(int(u[1,0]),int(u[0,0]),1)
     time.sleep(0.97)
     pi.stop()
     
     x,y,_ = gps.position()
-    h = state_init[2]-heading.heading(sensor)
+    h = theta-heading.heading(sensor)
 
     next_state = ca.vertcat(
     ca.horzcat(x), # East
