@@ -22,9 +22,9 @@ def position():
 	Distance=distance(E,N)
 	#print(msg.relPosE,msg.relPosN)
 	#print(Distance)
-	return E,N,Distance
+	return E/100,N/100,Distance
 	ser.close()
 	
 
-#_,_,y=position()
-#print(y)
+l,m,y=position()
+print(l*100,m*100,y)
