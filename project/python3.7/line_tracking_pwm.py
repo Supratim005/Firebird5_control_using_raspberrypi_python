@@ -71,7 +71,7 @@ x_init = 1.10
 y_init = 0.90
 theta_init = pi/4
 '''
-pwm_r_max = 255; pwm_r_min= 97;
+pwm_r_max = 255; pwm_r_min= 101;
 pwm_l_max = 247; pwm_l_min = 91;
 
 
@@ -354,7 +354,7 @@ if __name__ == '__main__':
 
 
         t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, u,sensor,theta_init)
-        print("theta:",state_init[2]*(180/pi))
+        print("x:",state_init[0],"y:",state_init[1],"theta:",state_init[2]*(180/pi))
 
 
         xx[:,mpc_iter]=state_init.T
