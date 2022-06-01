@@ -375,9 +375,13 @@ if __name__ == '__main__':
     print('\n\n')
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
-    
+
     plt.figure(1)
     plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
+    location = 0
+    legend_drawn_flag = True 
+    plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
+    plt.suptitle("Tracking")
     plt.suptitle("Tracking")
     plt.savefig('Tracking.png')
 
