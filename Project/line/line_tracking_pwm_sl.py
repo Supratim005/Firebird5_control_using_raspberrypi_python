@@ -12,29 +12,6 @@ import calibration
 import motion as pi
 pi.serial_open() # To serial access the avr board
 
-'''
-import serial
-import io
-import motion as pi 
-import actuator
-import csv
-import board
-import adafruit_bno055
-import keyboard
-i2c = board.I2C()
-
-#===========================================================================================================================
-#sensor interface
-
-IMU = adafruit_bno055.BNO055_I2C(i2c)
-GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
-
-#============================================================================================================================
-
-
-
-
-
 #==============================================================Simulation variable==========================================================================================================================
 
 step_horizon = 1    #sampling freq
@@ -67,6 +44,7 @@ R1 =0.01
 R2 =0.05
 r=0.05/2 # radious
 l=0.18 # base length
+
 '''
 Bellow
 x_init = 1.10
@@ -166,7 +144,7 @@ con1=ca.vertcat(
 RHS=phi @ (rl@(con * (controls-con1))) # "*: for elementwise @: for matrix"
 
 
-# maps controls from [va, vb, vc, vd].T to [vx, vy, omega].T
+# maps controls from [va, vb].T to [vx, vy, omega].T
 f = ca.Function('f', [states, controls], [RHS])
 
 
@@ -174,7 +152,7 @@ cost_fn = 0  # cost function
 g = X[:, 0] - P[:n_states]  # constraints in the equation
 
 i=1;
-# runge kutta
+# ========================Cost function==============================
 for k in range(0,N):
     st = X[:, k]
     con = U[:, k]
@@ -186,13 +164,12 @@ for k in range(0,N):
     k2 = f(st + step_horizon/2*k1, con)
     k3 = f(st + step_horizon/2*k2, con)
     k4 = f(st + step_horizon * k3, con)
-    #st_next_RK4 = st + (step_horizon / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
     f_val=f(st,con)
     st_next_euler=st+(step_horizon*f_val)
     g = ca.vertcat(g, st_next - st_next_euler)
     i=i+1
 
-
+#========================================Optimization Variable========================================
 OPT_variables = ca.vertcat(
     X.reshape((-1, 1)),   # Example: 3x11 ---> 33x1 where 3=states, 11=N+1
     U.reshape((-1, 1))
@@ -242,25 +219,19 @@ args = {
     'lbx': lbx,
     'ubx': ubx
 }
-#========================================problem setup =======================================================================================================
+#======================================================================================================
+
 
 #========================================simulation init=======================================================================================================
 t0 = 0
-#x_init = 0
-#y_init = 0
-#theta_init=0
-#state_init = ca.DM([x_init, y_init, theta_init]) 
+
 state_init = calibration.calibration()        # initial state
 theta_init=state_init[2]
 
-#i2c = board.I2C()
-#sensor = adafruit_bno055.BNO055_I2C(i2c)
-
-# xx = DM(state_init)
 t = ca.DM(t0)
 
 u0 = ca.DM.zeros((n_controls, N))  # initial control
-X0 = ca.repmat(state_init, 1, N+1)         # initial state full
+X0 = ca.repmat(state_init, 1, N+1) # initial state full
 
 
 mpc_iter = 0
@@ -270,9 +241,11 @@ times = np.array([[0]])
 
 p = ca.DM.zeros(n_states + N*(n_states+n_controls),1)
 
+#==============================Storing variable======================================
 xx=np.zeros([3,int(sim_time/step_horizon)])
 cat_controls=np.zeros([2,int(sim_time/step_horizon)])
 cat_states= np.zeros([3,int(sim_time/step_horizon)])
+#=====================================================================================
 
 if __name__ == '__main__':
 
@@ -345,7 +318,7 @@ if __name__ == '__main__':
         ))
 
 
-        #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f)
+        #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f) # for simulation
 
 
         t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, u,theta_init)
@@ -357,13 +330,11 @@ if __name__ == '__main__':
         cat_states[:,mpc_iter] = state_init.T
 
 
-        # print(X0)
         X0 = ca.horzcat(
             X0[:, 1:],
             ca.reshape(X0[:, -1], -1, 1)
         )
 
-        # xx ...
         t2 = time.time()
         times = np.vstack((
             times,
@@ -374,13 +345,12 @@ if __name__ == '__main__':
 
     main_loop_time = time.time()
 
-    #plt.plot()
-    #pi.serial_close()
 
     print('\n\n')
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
+    #====================Tracking============================
     plt.figure(1)
     plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
     location = 0 # For the best location
@@ -389,7 +359,7 @@ if __name__ == '__main__':
     plt.suptitle("Tracking")
     plt.savefig('Tracking.png')
 
-    #====================control============================
+    #====================Control============================
     plt.figure(2)
     plt.subplot(121)
     plt.suptitle("Control Signal")
