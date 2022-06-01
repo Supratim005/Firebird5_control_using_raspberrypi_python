@@ -382,18 +382,17 @@ if __name__ == '__main__':
     legend_drawn_flag = True 
     plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
     plt.suptitle("Tracking")
-    plt.suptitle("Tracking")
     plt.savefig('Tracking.png')
 
     #====================control============================
     plt.figure(2)
     plt.subplot(121)
     plt.suptitle("Control Signal")
-    plt.plot(cat_controls[0], color="orange")
-    plt.xlabel('Right_pwm')
-    plt.subplot(122)
-    plt.plot(cat_controls[1], color="yellow")
+    plt.plot(cat_controls[1], color="orange")
     plt.xlabel('Left_pwm')
+    plt.subplot(122)
+    plt.plot(cat_controls[0], color="yellow")
+    plt.xlabel('Right_pwm')
     plt.savefig('controls.png')
 
     #=======================States=============================
