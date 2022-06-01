@@ -269,6 +269,9 @@ times = np.array([[0]])
 p = ca.DM.zeros(n_states + N*(n_states+n_controls),1)
 
 xx=np.zeros([3,int(sim_time/step_horizon)])
+cat_controls=np.zeros([2,int(sim_time/step_horizon)])
+cat_states= np.zeros([3,int(sim_time/step_horizon)])
+
 
 if __name__ == '__main__':
 
@@ -330,19 +333,6 @@ if __name__ == '__main__':
 
         X0 = ca.reshape(sol['x'][: n_states * (N+1)], n_states, N+1)
 
-      
-
-
-        cat_states = np.dstack((
-            cat_states,
-            DM2Arr(X0)
-        ))
-
-        cat_controls = np.vstack((
-            cat_controls,
-            DM2Arr(u[:, 0])
-        ))
-
 
         t = np.vstack((
             t,
@@ -358,6 +348,8 @@ if __name__ == '__main__':
 
 
         xx[:,mpc_iter]=state_init.T
+        cat_controls[:,mpc_iter] = ca.DM.full(u0[:,0]).T
+        cat_states[:,mpc_iter] = state_init.T
 
 
         # print(X0)
@@ -383,5 +375,34 @@ if __name__ == '__main__':
     print('\n\n')
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
-    plt.plot(xx[0],xx[1],x_target,y_target)
+    
+    plt.figure(1)
+    plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
+    plt.suptitle("Tracking")
+    plt.savefig('Tracking.png')
+
+    #====================control============================
+    plt.figure(2)
+    plt.subplot(121)
+    plt.suptitle("Control Signal")
+    plt.plot(cat_controls[0], color="orange")
+    plt.xlabel('Right_pwm')
+    plt.subplot(122)
+    plt.plot(cat_controls[1], color="yellow")
+    plt.xlabel('Left_pwm')
+    plt.savefig('controls.png')
+
+    #=======================States=============================
+    plt.figure(3)
+    plt.subplot(311)
+    plt.plot(cat_states[0], color="orange")
+    plt.ylabel('X')
+    plt.subplot(312)
+    plt.plot(cat_states[1], color="yellow")
+    plt.ylabel('Y')
+    plt.subplot(313)
+    plt.plot(cat_states[2], color= "red")
+    plt.ylabel('Heading')
+    plt.suptitle("States")
+    plt.savefig('States.png')
     plt.show()
