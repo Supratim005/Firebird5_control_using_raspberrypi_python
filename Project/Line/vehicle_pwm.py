@@ -31,7 +31,7 @@ def vehicle(step_horizon, t0, u,theta,neg):
 
     if neg==1:
         h=-heading.heading(neg)
-        if -heading.heading(neg)>-(22/7):
+        if h>-(22/7):
             neg=0
 
 
