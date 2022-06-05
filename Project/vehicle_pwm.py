@@ -15,16 +15,35 @@ R2=0.18
 
 
 
-def vehicle(step_horizon, t0, u,theta):
+def vehicle(step_horizon, t0, u,theta,neg):
     u=ca.floor(u)
     pi.velocity(int(u[1,0]),int(u[0,0]),1)
     time.sleep(0.97)
     pi.stop()
     
     x,y,_= gps.position()
-    h = heading.heading(theta)
+    h = heading.heading(0)
 
-    
+    if h-theta>5.238095238:
+        #h=-heading.heading(neg)
+        neg=1
+
+    elif h-theta<-5.238095238:
+
+        #h=-heading.heading(neg)
+        neg=2
+
+
+    if neg==1:
+        h=-heading.heading(neg)
+        if h>-(22/7):
+            neg=0
+
+    elif neg ==2:
+        h=heading.heading(neg)
+        if h<(22/7):
+            neg=0
+
 
     next_state = ca.vertcat(
     ca.horzcat(x), # East
@@ -38,4 +57,4 @@ def vehicle(step_horizon, t0, u,theta):
         ca.reshape(u[:, -1], -1, 1)
     )
 
-    return t0, next_state, u0,h
+    return t0, next_state, u0,h,neg
