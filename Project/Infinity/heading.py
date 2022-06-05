@@ -1,7 +1,7 @@
 import board
 import adafruit_bno055
 i2c = board.I2C()
-#sensor = adafruit_bno055.BNO055_I2C(i2c)
+sensor = adafruit_bno055.BNO055_I2C(i2c)
 
 def heading(neg):
     #sensor = adafruit_bno055.BNO055_I2C(i2c)
