@@ -13,11 +13,11 @@ def heading(neg):
         return (360-sensor.euler[0])*(22/1260)
 
     elif neg==1:
-        #print(3)
+        print("mode:",3)
         return sensor.euler[0]*(22/1260)
 
     elif neg==2:
-        #print(4)
+        print("mode:",4)
         return (360-sensor.euler[0])*(22/1260)
     elif sensor.euler[0]==0 or sensor.euler[0]==360:
         return 0
