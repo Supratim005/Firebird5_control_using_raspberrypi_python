@@ -346,7 +346,7 @@ if __name__ == '__main__':
 
     main_loop_time = time.time()
 
-
+    np.savetxt("States.csv", cat_states , delimiter=",")
     print('\n\n')
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
