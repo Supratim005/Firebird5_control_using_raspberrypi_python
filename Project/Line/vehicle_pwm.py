@@ -21,10 +21,10 @@ def vehicle(step_horizon, t0, u,theta):
     time.sleep(0.97)
     pi.stop()
     
-    x,y,_ = gps.position()
+    x,y,_= gps.position()
     h = heading.heading()
 
-    if h-theta>300:
+    if theta-h>300:
 
         h=-h
 
