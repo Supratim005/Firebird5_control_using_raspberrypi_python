@@ -26,11 +26,11 @@ def vehicle(step_horizon, t0, u,theta,neg):
 
     if h-theta>5.238095238:
 
-        h=-h
+        h=-heading.heading()
         neg=1
 
     else if neg=1:
-        h=-h
+        h=-heading.heading()
         if h>-180:
             neg=0
 
