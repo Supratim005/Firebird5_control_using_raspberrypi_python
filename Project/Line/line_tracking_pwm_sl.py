@@ -16,7 +16,7 @@ pi.serial_open() # To serial access the avr board
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time =2500#simulation time
+sim_time =250#simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -322,7 +322,7 @@ if __name__ == '__main__':
         #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f) # for simulation
 
 
-        t0, state_init, u0,theta= vehicle_pwm.vehicle(step_horizon, t0, u,theta)
+        t0, state_init, u0,theta,neg= vehicle_pwm.vehicle(step_horizon, t0, u,theta ,neg)
         print("x:",state_init[0],"y:",state_init[1],"theta:",state_init[2]*(180/pi))
 
 
