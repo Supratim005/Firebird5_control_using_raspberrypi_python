@@ -12,5 +12,8 @@ def heading(neg):
 
     elif neg==1:
         return sensor.euler[0]*(22/1260)
+
+    elif neg==2:
+        return (360-sensor.euler[0])*(22/1260)
     else:
         return 0
