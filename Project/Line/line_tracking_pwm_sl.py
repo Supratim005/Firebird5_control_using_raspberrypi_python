@@ -226,7 +226,7 @@ args = {
 t0 = 0
 
 state_init = calibration.calibration()        # initial state
-theta_init=state_init[2]
+theta=state_init[2]
 
 t = ca.DM(t0)
 
@@ -321,7 +321,7 @@ if __name__ == '__main__':
         #t0, state_init, u0 = shift_timestep(step_horizon, t0, state_init, u, f) # for simulation
 
 
-        t0, state_init, u0 = vehicle_pwm.vehicle(step_horizon, t0, u,theta_init)
+        t0, state_init, u0,theta = vehicle_pwm.vehicle(step_horizon, t0, u,theta)
         print("x:",state_init[0],"y:",state_init[1],"theta:",state_init[2]*(180/pi))
 
 

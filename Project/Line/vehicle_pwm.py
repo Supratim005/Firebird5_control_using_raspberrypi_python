@@ -22,7 +22,15 @@ def vehicle(step_horizon, t0, u,theta):
     pi.stop()
     
     x,y,_ = gps.position()
-    h = (heading.heading())
+    h = heading.heading()
+
+    if h-theta>300:
+
+        h=-h
+
+    else:
+
+        continue
 
     next_state = ca.vertcat(
     ca.horzcat(x), # East
