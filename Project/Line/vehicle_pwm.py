@@ -22,11 +22,11 @@ def vehicle(step_horizon, t0, u,theta,neg):
     pi.stop()
     
     x,y,_= gps.position()
-    h = heading.heading()
+    h = heading.heading(neg)
 
     if h-theta>5.238095238:
 
-        h=-heading.heading()
+        h=-heading.heading(neg)
         neg=1
 
     if neg==1:
