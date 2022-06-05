@@ -59,4 +59,4 @@ def vehicle(step_horizon, t0, u,theta,neg):
         ca.reshape(u[:, -1], -1, 1)
     )
 
-    return t0, next_state, u0
+    return t0, next_state, u0,h,neg
