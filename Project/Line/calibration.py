@@ -15,7 +15,7 @@ def calibration():
 		os.system('cls' if os.name == 'nt' else 'clear')
 		x,y,_ = gps.position()
 		h = (360-sensor.euler[0])*(22/1260)
-		if h==0 or h==360:
+		if h==0 or h==360*(22/1260):
 			h=0
 		init_state = ca.vertcat(
 		ca.horzcat(x), # East
