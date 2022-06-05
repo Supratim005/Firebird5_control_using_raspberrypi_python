@@ -24,13 +24,10 @@ def vehicle(step_horizon, t0, u,theta):
     x,y,_= gps.position()
     h = heading.heading()
 
-    if theta-h>300:
+    if h-theta>5.238095238:
 
-        h=-h
+        h=-heading.heading()
 
-    else:
-
-        continue
 
     next_state = ca.vertcat(
     ca.horzcat(x), # East
