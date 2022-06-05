@@ -15,7 +15,7 @@ R2=0.18
 
 
 
-def vehicle(step_horizon, t0, u,theta):
+def vehicle(step_horizon, t0, u,theta,neg):
     u=ca.floor(u)
     pi.velocity(int(u[1,0]),int(u[0,0]),1)
     time.sleep(0.97)
@@ -26,7 +26,13 @@ def vehicle(step_horizon, t0, u,theta):
 
     if h-theta>5.238095238:
 
-        h=-heading.heading()
+        h=-h
+        neg=1
+
+    else if neg=1:
+        h=-h
+        if h>-180:
+            neg=0
 
 
     next_state = ca.vertcat(
@@ -41,4 +47,4 @@ def vehicle(step_horizon, t0, u,theta):
         ca.reshape(u[:, -1], -1, 1)
     )
 
-    return t0, next_state, u0,h
+    return t0, next_state, u0,h,neg
