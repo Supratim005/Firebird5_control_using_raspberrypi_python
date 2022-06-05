@@ -16,7 +16,7 @@ pi.serial_open() # To serial access the avr board
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time =250#simulation time
+sim_time =2500#simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
