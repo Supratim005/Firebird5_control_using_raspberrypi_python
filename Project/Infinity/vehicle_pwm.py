@@ -15,7 +15,7 @@ R2=0.18
 
 
 
-def vehicle(step_horizon, t0, u,sensor,theta,neg):
+def vehicle(step_horizon, t0, u,theta,neg):
     u=ca.floor(u)
     pi.velocity(int(u[1,0]),int(u[0,0]),1)
     time.sleep(0.97)
