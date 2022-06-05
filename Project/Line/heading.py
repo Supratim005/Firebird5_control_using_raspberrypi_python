@@ -6,18 +6,18 @@ sensor = adafruit_bno055.BNO055_I2C(i2c)
 def heading(neg):
     #sensor = adafruit_bno055.BNO055_I2C(i2c)
     if(sensor.euler[0]<=180 and sensor.euler[0]>0) and neg==0:
-        print(1)
+        #print(1)
         return -(sensor.euler[0])*(22/1260)
     elif(sensor.euler[0]>180 and sensor.euler[0]<=360) and neg ==0:
-        print(2)
+        #print(2)
         return (360-sensor.euler[0])*(22/1260)
 
     elif neg==1:
-        print(3)
+        #print(3)
         return sensor.euler[0]*(22/1260)
 
     elif neg==2:
-        print(4)
+        #print(4)
         return (360-sensor.euler[0])*(22/1260)
     elif sensor.euler[0]==0 or sensor.euler[0]==360:
         return 0
