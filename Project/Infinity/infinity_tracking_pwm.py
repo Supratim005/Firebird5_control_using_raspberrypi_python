@@ -269,7 +269,7 @@ p = ca.DM.zeros(n_states + N*(n_states+n_controls),1)
 xx=np.zeros([3,int(sim_time/step_horizon)])
 cat_controls=np.zeros([2,int(sim_time/step_horizon)])
 cat_states= np.zeros([3,int(sim_time/step_horizon)])
-actual_states= np.zeros([3,int(sim_time/step_horizon)])
+target_states= np.zeros([3,int(sim_time/step_horizon)])
 neg=0
 
 if __name__ == '__main__':
@@ -349,6 +349,9 @@ if __name__ == '__main__':
         xx[:,mpc_iter]=state_init.T
         cat_controls[:,mpc_iter] = ca.DM.full(u0[:,0]).T
         cat_states[:,mpc_iter] = state_init.T
+        target_states[0,mpc_iter]= x_ref
+        target_states[1,mpc_iter]= y_ref
+        target_states[2,mpc_iter]= theta_ref
 
 
         # print(X0)
@@ -376,7 +379,7 @@ if __name__ == '__main__':
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
     np.savetxt("States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
-    np.savetxt("Actual_states.csv", actual_states.T , delimiter="," , header='x,y,theta',comments='')
+    np.savetxt("target_states.csv", actual_states.T , delimiter="," , header='x,y,theta',comments='')
 
     plt.figure(1)
     plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
