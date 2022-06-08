@@ -378,7 +378,7 @@ if __name__ == '__main__':
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
     np.savetxt("States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
-    np.savetxt("target_states.csv", actual_states.T , delimiter="," , header='x,y,theta',comments='')
+    np.savetxt("target_states.csv", target_states.T , delimiter="," , header='x,y,theta',comments='')
 
     plt.figure(1)
     plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
