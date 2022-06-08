@@ -344,6 +344,7 @@ if __name__ == '__main__':
 
         t0, state_init, u0,theta,neg= vehicle_pwm.vehicle(step_horizon, t0, u,theta ,neg)
         print("x:",state_init[0],"y:",state_init[1],"theta:",state_init[2]*(180/pi))
+        print("x_ref:",x_ref,"y_ref:",y_ref,"theta_ref:",theta_ref*(180/pi))
 
 
         xx[:,mpc_iter]=state_init.T
