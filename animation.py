@@ -26,12 +26,13 @@ def animation(i):
 
   ax.clear()
   ax.plot(x1, y1)
-  ax.plot(x2, y2)
+  ax.plot(x2, y2,color= "red")
   location = 0 # For the best location
   legend_drawn_flag = True 
   plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
 
 
 
-animation = FuncAnimation(fig, func=animation, interval=1000)
+animation= FuncAnimation(fig, func=animation, interval=1000)
+animation.save("animation.gif")
 plt.show()
