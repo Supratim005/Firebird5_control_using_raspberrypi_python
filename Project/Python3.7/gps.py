@@ -27,4 +27,4 @@ def position():
 	
 
 l,m,y=position()
-print(l*100,m*100,y)
+print(l,m,y)

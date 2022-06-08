@@ -371,8 +371,7 @@ if __name__ == '__main__':
 
     main_loop_time = time.time()
 
-    #plt.plot()
-    pi.serial_close()
+  
 
     print('\n\n')
     print('Total time: ', main_loop_time - main_loop)
