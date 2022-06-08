@@ -269,8 +269,8 @@ p = ca.DM.zeros(n_states + N*(n_states+n_controls),1)
 xx=np.zeros([3,int(sim_time/step_horizon)])
 cat_controls=np.zeros([2,int(sim_time/step_horizon)])
 cat_states= np.zeros([3,int(sim_time/step_horizon)])
+actual_states= np.zeros([3,int(sim_time/step_horizon)])
 neg=0
-
 
 if __name__ == '__main__':
 
@@ -375,7 +375,8 @@ if __name__ == '__main__':
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
-    np.savetxt("States.csv", cat_states , delimiter=",")
+    np.savetxt("States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
+    np.savetxt("Actual_states.csv", actual_states.T , delimiter="," , header='x,y,theta',comments='')
 
     plt.figure(1)
     plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
