@@ -50,7 +50,7 @@ sin=np.sin
 cos=np.cos
 atan2=np.arctan2
 sqrt=math.sqrt
-x_target=1.1+0.7*sin((2*pi/200)*t_tra);
+x_target=1.5+0.7*sin((2*pi/200)*t_tra);
 y_target=0.9+0.7*sin((4*pi/200)*t_tra);
 theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
 
@@ -58,11 +58,13 @@ theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
 
 #============================================================Sytem variables========================================================================================================================
 # setting matrix_weights' variables
-Q_x = 60000
-Q_y = 10000
-Q_theta = 30000
-R1 = 0.01
-R2 =0.0001
+
+
+Q_x = 60000000
+Q_y = 10000000
+Q_theta = 50000
+R1 = 8
+R2 = 1
 r=0.05/2 # radious
 l=0.18 # base length
 '''
@@ -244,9 +246,9 @@ args = {
 
 #========================================simulation init=======================================================================================================
 t0 = 0
-#x_init = 1.10
+#x_init = 1.5
 #y_init = 0.90
-#theta_init=pi/4
+#theta_init=.88 #(50 digree)
 #state_init = ca.DM([x_init, y_init, theta_init]) 
 state_init = calibration.calibration()        # initial state
 theta_init=state_init[2]
@@ -378,8 +380,8 @@ if __name__ == '__main__':
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
-    np.savetxt("States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
-    np.savetxt("target_states.csv", target_states.T , delimiter="," , header='x,y,theta',comments='')
+    np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
+    np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/target_states.csv", target_states.T , delimiter="," , header='x,y,theta',comments='')
 
     plt.figure(1)
     plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
