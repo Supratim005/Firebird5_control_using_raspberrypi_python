@@ -389,7 +389,7 @@ if __name__ == '__main__':
     legend_drawn_flag = True 
     plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
     plt.suptitle("Tracking")
-    plt.savefig('Tracking.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/Tracking.png')
 
     #====================control============================
     plt.figure(2)
@@ -400,7 +400,7 @@ if __name__ == '__main__':
     plt.subplot(122)
     plt.plot(cat_controls[0], color="yellow")
     plt.xlabel('Right_pwm')
-    plt.savefig('controls.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/controls.png')
 
     #=======================States=============================
     plt.figure(3)
@@ -414,5 +414,5 @@ if __name__ == '__main__':
     plt.plot(cat_states[2], color= "red")
     plt.ylabel('Heading')
     plt.suptitle("States")
-    plt.savefig('States.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/States.png')
     plt.show()
