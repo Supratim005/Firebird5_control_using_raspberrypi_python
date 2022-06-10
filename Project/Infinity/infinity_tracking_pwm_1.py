@@ -14,7 +14,7 @@ pi.serial_open() # To serial access the avr board
 
 '''
 import serial
-import iob
+import io
 import motion as pi 
 import actuator
 import csv
@@ -38,8 +38,8 @@ GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
 #==============================================================Simulation variable==========================================================================================================================
 
 step_horizon = 1    #sampling freq
-N = 10             # number of look ahead steps
-sim_time = 200      # simulation time
+N = 10              # number of look ahead steps
+sim_time = 70      # simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -50,25 +50,32 @@ sin=np.sin
 cos=np.cos
 atan2=np.arctan2
 sqrt=math.sqrt
-x_target=1.1+0.7*sin((2*pi/200)*t_tra);
-y_target=0.9+0.7*sin((4*pi/200)*t_tra);
-theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
-
+#x_target=1.1+0.7*sin((2*pi/200)*t_tra);
+#y_target=0.8+0.7*sin((4*pi/200)*t_tra);
+#theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
+x_target=1.1+0.5*sin((2*pi/70)*t_tra);
+y_target=0.7+0.5*sin((4*pi/70)*t_tra);
+theta_target=np.unwrap( atan2(2*pi*cos((2*pi*t_tra)/35), pi*cos((pi*t_tra)/35)) );
 #====================================================================================================================================================================================
 
 #============================================================Sytem variables========================================================================================================================
 # setting matrix_weights' variables
-Q_x = 6000000000
-Q_y = 1000000000
-Q_theta = 500000000
-R1 = 8
-R2 = 1
+
+
+Q_x = 60000
+Q_y = 10000
+Q_theta = 30000
+R1 = 0.01
+R2 =0.0001
 r=0.05/2 # radious
 l=0.18 # base length
-#x_init = 1.097
-#y_init = 0.90
-#theta_init = pi/4
-pwm_r_max = 255; pwm_r_min= 97;
+'''
+Bellow
+x_init = 1.10
+y_init = 0.90
+theta_init = pi/4
+'''
+pwm_r_max = 255; pwm_r_min= 101;
 pwm_l_max = 247; pwm_l_min = 91;
 
 
@@ -104,16 +111,15 @@ states = ca.vertcat(
     theta
 )
 n_states = states.numel()
-
 # control symbolic variables
-
 v = ca.SX.sym('pwm_r')
 omega = ca.SX.sym('pwm_l')
 controls = ca.vertcat(
     v,
     omega
 )
-n_controls= controls.numel()
+n_controls = controls.numel()
+
 
 # matrix containing all states over all time steps +1 (each column is a state vector)
 X = ca.SX.sym('X', n_states, N + 1)
@@ -159,7 +165,7 @@ con1=ca.vertcat(
 
 # Euler discretization
 #RHS = con*(controls-con1)
-RHS=phi @ (rl@(con * (controls-con1)))
+RHS=phi @ (rl@(con * (controls-con1))) # "*: for elementwise @: for matrix"
 
 
 # maps controls from [va, vb, vc, vd].T to [vx, vy, omega].T
@@ -216,12 +222,12 @@ solver = ca.nlpsol('solver', 'ipopt', nlp_prob, opts)
 lbx = ca.DM.zeros((n_states*(N+1) + n_controls*N, 1))
 ubx = ca.DM.zeros((n_states*(N+1) + n_controls*N, 1))
 
-lbx[0: n_states*(N+1): n_states] = -ca.inf     # X lower bound
-lbx[1: n_states*(N+1): n_states] = -ca.inf     # Y lower bound
+lbx[0: n_states*(N+1): n_states] = -2     # X lower bound
+lbx[1: n_states*(N+1): n_states] = -1     # Y lower bound
 lbx[2: n_states*(N+1): n_states] = -ca.inf     # theta lower bound
 
-ubx[0: n_states*(N+1): n_states] = ca.inf      # X upper bound
-ubx[1: n_states*(N+1): n_states] = ca.inf      # Y upper bound
+ubx[0: n_states*(N+1): n_states] = 2      # X upper bound
+ubx[1: n_states*(N+1): n_states] = 2      # Y upper bound
 ubx[2: n_states*(N+1): n_states] = ca.inf      # theta upper bound
 
 
@@ -242,9 +248,9 @@ args = {
 
 #========================================simulation init=======================================================================================================
 t0 = 0
-#x_init = 1.10
+#x_init = 1.5
 #y_init = 0.90
-#theta_init=pi/4
+#theta_init=.88 #(50 digree)
 #state_init = ca.DM([x_init, y_init, theta_init]) 
 state_init = calibration.calibration()        # initial state
 theta_init=state_init[2]
@@ -267,6 +273,7 @@ p = ca.DM.zeros(n_states + N*(n_states+n_controls),1)
 xx=np.zeros([3,int(sim_time/step_horizon)])
 cat_controls=np.zeros([2,int(sim_time/step_horizon)])
 cat_states= np.zeros([3,int(sim_time/step_horizon)])
+target_states= np.zeros([3,int(sim_time/step_horizon)])
 neg=0
 
 if __name__ == '__main__':
@@ -291,9 +298,9 @@ if __name__ == '__main__':
 
             theta_ref=theta_target[t_predict]
 
-            u_ref= sqrt( (49*pi**2*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000 ) 
-            omega_ref=((49*pow(pi,3)*cos((pi*t_predict)/50)*sin((pi*t_predict)/100))/50000000 - (49*pow(pi,3)*cos((pi*t_predict)/100)*sin((pi*t_predict)/50))/25000000)/((49*pow(pi,2)*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000)
-
+            u_ref=sqrt( (pi**2*cos((pi*t_predict)/35)**2)/4900 + (pi**2*cos((2*pi*t_predict)/35)**2)/1225 )
+            omega_ref=( -((pi**3*cos((pi*t_predict)/35)*sin((2*pi*t_predict)/35))/42875 - (pi**3*cos((2*pi*t_predict)/35)*sin((pi*t_predict)/35))/85750)/((pi**2*cos((pi*t_predict)/35)**2)/4900 + (pi**2*cos((2*pi*t_predict)/35)**2)/1225) )
+            
             right_pwm_ref= math.floor((158/4)*((1/(2*r))*(2*u_ref+l*omega_ref))+97) # in pwm
             left_pwm_ref= math.floor((156/4)*((1/(2*r))*(2*u_ref-l*omega_ref))+91) # in  pwm
 
@@ -340,20 +347,25 @@ if __name__ == '__main__':
 
 
         t0, state_init, u0,theta,neg= vehicle_pwm.vehicle(step_horizon, t0, u,theta ,neg)
-
         print("x:",state_init[0],"y:",state_init[1],"theta:",state_init[2]*(180/pi))
+        print("x_ref:",x_ref,"y_ref:",y_ref,"theta_ref:",theta_ref*(180/pi))
 
 
         xx[:,mpc_iter]=state_init.T
         cat_controls[:,mpc_iter] = ca.DM.full(u0[:,0]).T
         cat_states[:,mpc_iter] = state_init.T
+        target_states[0,mpc_iter]= x_ref
+        target_states[1,mpc_iter]= y_ref
+        target_states[2,mpc_iter]= theta_ref
 
 
+        # print(X0)
         X0 = ca.horzcat(
             X0[:, 1:],
             ca.reshape(X0[:, -1], -1, 1)
         )
 
+        # xx ...
         t2 = time.time()
         times = np.vstack((
             times,
@@ -364,21 +376,24 @@ if __name__ == '__main__':
 
     main_loop_time = time.time()
 
-    np.savetxt("States.csv", cat_states , delimiter=",")
+  
+
     print('\n\n')
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
-    #====================Tracking============================
+    np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
+    np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/target_states.csv", target_states.T , delimiter="," , header='x,y,theta',comments='')
+
     plt.figure(1)
     plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
-    location = 0 # For the best location
+    location = 0
     legend_drawn_flag = True 
     plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
     plt.suptitle("Tracking")
-    plt.savefig('Tracking.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/Tracking.png')
 
-    #====================Control============================
+    #====================control============================
     plt.figure(2)
     plt.subplot(121)
     plt.suptitle("Control Signal")
@@ -387,7 +402,7 @@ if __name__ == '__main__':
     plt.subplot(122)
     plt.plot(cat_controls[0], color="yellow")
     plt.xlabel('Right_pwm')
-    plt.savefig('controls.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/controls.png')
 
     #=======================States=============================
     plt.figure(3)
@@ -401,5 +416,5 @@ if __name__ == '__main__':
     plt.plot(cat_states[2], color= "red")
     plt.ylabel('Heading')
     plt.suptitle("States")
-    plt.savefig('States.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/States.png')
     plt.show()
