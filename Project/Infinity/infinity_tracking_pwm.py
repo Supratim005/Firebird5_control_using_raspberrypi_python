@@ -50,8 +50,8 @@ sin=np.sin
 cos=np.cos
 atan2=np.arctan2
 sqrt=math.sqrt
-x_target=1.5+0.7*sin((2*pi/200)*t_tra);
-y_target=0.9+0.7*sin((4*pi/200)*t_tra);
+x_target=1.1+0.7*sin((2*pi/200)*t_tra);
+y_target=0.8+0.7*sin((4*pi/200)*t_tra);
 theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
 
 #====================================================================================================================================================================================
@@ -60,11 +60,11 @@ theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
 # setting matrix_weights' variables
 
 
-Q_x = 60000000
-Q_y = 10000000
-Q_theta = 50000
-R1 = 8
-R2 = 1
+Q_x = 60000
+Q_y = 10000
+Q_theta = 30000
+R1 = 0.01
+R2 =0.0001
 r=0.05/2 # radious
 l=0.18 # base length
 '''
