@@ -394,8 +394,8 @@ if __name__ == '__main__':
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
-    MSE = np.square(np.subtract(xx[0],x_target[0:sim_time])).mean()+np.square(np.subtract(xx[1],y_target[0:sim_time])).mean()
-          +np.square(np.subtract(xx[2],theta_target[0:sim_time])).mean() 
+    MSE = np.square(np.subtract(xx[0],x_target[0:sim_time])).mean()+np.square(np.subtract(xx[1],y_target[0:sim_time])).mean() 
+    +np.square(np.subtract(xx[2],theta_target[0:sim_time])).mean() 
     RMSE = math.sqrt(MSE)
     print("Root Mean Square Error:\n",RMSE)
 
