@@ -422,16 +422,20 @@ if __name__ == '__main__':
     plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/controls.png')
 
     #=======================States=============================
+    n=np.arange(1,sim_time+1)
     plt.figure(3)
     plt.subplot(311)
-    plt.plot(cat_states[0], color="orange")
+    plt.plot(n,cat_states[0],n,x_target[0:sim_time])
     plt.ylabel('X')
     plt.subplot(312)
-    plt.plot(cat_states[1], color="yellow")
+    plt.plot(n,cat_states[1],n,y_target[0:sim_time])
     plt.ylabel('Y')
     plt.subplot(313)
-    plt.plot(cat_states[2], color= "red")
+    plt.plot(n,cat_states[2],n,theta_target[0:sim_time])
     plt.ylabel('Heading')
+    location = 0
+    legend_drawn_flag = True 
+    plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
     plt.suptitle("States")
     plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/States.png')
     plt.show()
