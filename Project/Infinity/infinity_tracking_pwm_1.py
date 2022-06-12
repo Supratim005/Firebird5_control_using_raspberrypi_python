@@ -39,7 +39,7 @@ GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time = 70      # simulation time
+sim_time = 60      # simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -53,9 +53,9 @@ sqrt=math.sqrt
 #x_target=1.1+0.7*sin((2*pi/200)*t_tra);
 #y_target=0.8+0.7*sin((4*pi/200)*t_tra);
 #theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
-x_target=1.1+0.5*sin((2*pi/70)*t_tra);
-y_target=0.7+0.5*sin((4*pi/70)*t_tra);
-theta_target=np.unwrap( atan2(2*pi*cos((2*pi*t_tra)/35), pi*cos((pi*t_tra)/35)) );
+x_target=1.1+0.5*sin((2*pi/60)*t_tra);
+y_target=0.7+0.5*sin((4*pi/60)*t_tra);
+theta_target=np.unwrap( atan2(2*pi*cos((pi*t_tra)/15), pi*cos((pi*t_tra)/30)) );
 #====================================================================================================================================================================================
 
 #============================================================Sytem variables========================================================================================================================
@@ -81,8 +81,8 @@ x_init = 1.10
 y_init = 0.90
 theta_init = pi/4
 '''
-pwm_r_max = 255; pwm_r_min= 101;
-pwm_l_max = 247; pwm_l_min = 91;
+pwm_r_max = 255; pwm_r_min= 110;
+pwm_l_max = 247; pwm_l_min = 100;
 
 
 
@@ -117,15 +117,16 @@ states = ca.vertcat(
     theta
 )
 n_states = states.numel()
+
 # control symbolic variables
-v = ca.SX.sym('pwm_r')
+
+v = ca.SX.sym('vpwm_r')
 omega = ca.SX.sym('pwm_l')
 controls = ca.vertcat(
     v,
     omega
 )
-n_controls = controls.numel()
-
+n_controls= controls.numel()
 
 # matrix containing all states over all time steps +1 (each column is a state vector)
 X = ca.SX.sym('X', n_states, N + 1)
@@ -158,23 +159,23 @@ rl = ca.vertcat(
 
 #con= 3.8/255 #( 3.8 rad/sec /255)
 con=ca.vertcat(
-    ca.horzcat(4/158),
-    ca.horzcat(4/156)
+    ca.horzcat(4/145),
+    ca.horzcat(4/147)
 )
 
 con1=ca.vertcat(
-    ca.horzcat(97),
-    ca.horzcat(91)
+    ca.horzcat(110),
+    ca.horzcat(100)
 )
 
 
 
 # Euler discretization
 #RHS = con*(controls-con1)
-RHS=phi @ (rl@(con * (controls-con1))) # "*: for elementwise @: for matrix"
+RHS=phi @ (rl@(con * (controls-con1)))
 
+#print(RHS)
 
-# maps controls from [va, vb, vc, vd].T to [vx, vy, omega].T
 f = ca.Function('f', [states, controls], [RHS])
 
 
@@ -304,9 +305,12 @@ if __name__ == '__main__':
 
             theta_ref=theta_target[t_predict]
 
-            u_ref=sqrt( (pi**2*cos((pi*t_predict)/35)**2)/4900 + (pi**2*cos((2*pi*t_predict)/35)**2)/1225 )
-            omega_ref=( -((pi**3*cos((pi*t_predict)/35)*sin((2*pi*t_predict)/35))/42875 - (pi**3*cos((2*pi*t_predict)/35)*sin((pi*t_predict)/35))/85750)/((pi**2*cos((pi*t_predict)/35)**2)/4900 + (pi**2*cos((2*pi*t_predict)/35)**2)/1225) )
-            
+            u_ref=sqrt( (pi**2*cos((pi*t_predict)/15)**2)/900 + (pi**2*cos((pi*t_predict)/30)**2)/3600 )
+
+            omega_ref=( ((pi**3*cos((pi*t_predict)/15)*sin((pi*t_predict)/30))/54000 - 
+                        (pi**3*cos((pi*t_predict)/30)*sin((pi*t_predict)/15))/27000)/((pi**2*cos((pi*t_predict)/15)**2)/900 + 
+                        (pi**2*cos((pi*t_predict)/30)**2)/3600) )
+
             right_pwm_ref= math.floor((158/4)*((1/(2*r))*(2*u_ref+l*omega_ref))+97) # in pwm
             left_pwm_ref= math.floor((156/4)*((1/(2*r))*(2*u_ref-l*omega_ref))+91) # in  pwm
 
@@ -360,9 +364,9 @@ if __name__ == '__main__':
         xx[:,mpc_iter]=state_init.T
         cat_controls[:,mpc_iter] = ca.DM.full(u0[:,0]).T
         cat_states[:,mpc_iter] = state_init.T
-        target_states[0,mpc_iter]= x_ref
-        target_states[1,mpc_iter]= y_ref
-        target_states[2,mpc_iter]= theta_ref
+        target_states[0,mpc_iter]= x_target[mpc_iter]
+        target_states[1,mpc_iter]= y_target[mpc_iter]
+        target_states[2,mpc_iter]= theta_target[mpc_iter]
 
 
         # print(X0)
