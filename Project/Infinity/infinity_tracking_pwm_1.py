@@ -231,13 +231,27 @@ solver = ca.nlpsol('solver', 'ipopt', nlp_prob, opts)
 lbx = ca.DM.zeros((n_states*(N+1) + n_controls*N, 1))
 ubx = ca.DM.zeros((n_states*(N+1) + n_controls*N, 1))
 
-lbx[0: n_states*(N+1): n_states] = -2     # X lower bound
-lbx[1: n_states*(N+1): n_states] = -1     # Y lower bound
+
+
+lbx[0: n_states*(N+1): n_states] = -ca.inf     # X lower bound
+lbx[1: n_states*(N+1): n_states] = -ca.inf     # Y lower bound
 lbx[2: n_states*(N+1): n_states] = -ca.inf     # theta lower bound
 
-ubx[0: n_states*(N+1): n_states] = 2      # X upper bound
-ubx[1: n_states*(N+1): n_states] = 2      # Y upper bound
+ubx[0: n_states*(N+1): n_states] = ca.inf      # X upper bound
+ubx[1: n_states*(N+1): n_states] = ca.inf      # Y upper bound
 ubx[2: n_states*(N+1): n_states] = ca.inf      # theta upper bound
+
+'''
+
+lbx[0: n_states*(N+1): n_states] = 0.5     # X lower bound
+lbx[1: n_states*(N+1): n_states] = 0.1     # Y lower bound
+lbx[2: n_states*(N+1): n_states] = -ca.inf     # theta lower bound
+
+ubx[0: n_states*(N+1): n_states] = 1.6      # X upper bound
+ubx[1: n_states*(N+1): n_states] = 1.3     # Y upper bound
+ubx[2: n_states*(N+1): n_states] = ca.inf      # theta upper bound
+
+'''
 
 
 lbx[3*(N+1):3*(N+1)+2*N:2] = pwm_r_min                 
