@@ -39,7 +39,7 @@ GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time = 200      # simulation time
+sim_time = 60      # simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -50,31 +50,43 @@ sin=np.sin
 cos=np.cos
 atan2=np.arctan2
 sqrt=math.sqrt
-x_target=1.1+0.7*sin((2*pi/200)*t_tra);
-y_target=0.8+0.7*sin((4*pi/200)*t_tra);
-theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
-
+#x_target=1.1+0.7*sin((2*pi/200)*t_tra);
+#y_target=0.8+0.7*sin((4*pi/200)*t_tra);
+#theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
+x_target=1.1+0.5*sin((2*pi/60)*t_tra);
+y_target=0.7+0.5*sin((4*pi/60)*t_tra);
+theta_target=np.unwrap( atan2(2*pi*cos((pi*t_tra)/15), pi*cos((pi*t_tra)/30)) );
 #====================================================================================================================================================================================
 
 #============================================================Sytem variables========================================================================================================================
 # setting matrix_weights' variables
 
+Q_x = 60000000000
+Q_y = 10000000000
+Q_theta = 3000000
+R1 = 0.1
+R2 = 0.01
 
+'''
 Q_x = 60000
 Q_y = 10000
 Q_theta = 30000
 R1 = 0.01
 R2 =0.0001
+'''
 r=0.05/2 # radious
 l=0.18 # base length
+
+
 '''
 Bellow
 x_init = 1.10
 y_init = 0.90
 theta_init = pi/4
 '''
-pwm_r_max = 255; pwm_r_min= 101;
-pwm_l_max = 247; pwm_l_min = 91;
+
+pwm_r_max = 255; pwm_r_min= 110;
+pwm_l_max = 247; pwm_l_min = 100;
 
 
 
@@ -109,15 +121,16 @@ states = ca.vertcat(
     theta
 )
 n_states = states.numel()
+
 # control symbolic variables
-v = ca.SX.sym('pwm_r')
+
+v = ca.SX.sym('vpwm_r')
 omega = ca.SX.sym('pwm_l')
 controls = ca.vertcat(
     v,
     omega
 )
-n_controls = controls.numel()
-
+n_controls= controls.numel()
 
 # matrix containing all states over all time steps +1 (each column is a state vector)
 X = ca.SX.sym('X', n_states, N + 1)
@@ -150,23 +163,23 @@ rl = ca.vertcat(
 
 #con= 3.8/255 #( 3.8 rad/sec /255)
 con=ca.vertcat(
-    ca.horzcat(4/158),
-    ca.horzcat(4/156)
+    ca.horzcat(4/145),
+    ca.horzcat(4/147)
 )
 
 con1=ca.vertcat(
-    ca.horzcat(97),
-    ca.horzcat(91)
+    ca.horzcat(110),
+    ca.horzcat(100)
 )
 
 
 
 # Euler discretization
 #RHS = con*(controls-con1)
-RHS=phi @ (rl@(con * (controls-con1))) # "*: for elementwise @: for matrix"
+RHS=phi @ (rl@(con * (controls-con1)))
 
+#print(RHS)
 
-# maps controls from [va, vb, vc, vd].T to [vx, vy, omega].T
 f = ca.Function('f', [states, controls], [RHS])
 
 
@@ -220,13 +233,27 @@ solver = ca.nlpsol('solver', 'ipopt', nlp_prob, opts)
 lbx = ca.DM.zeros((n_states*(N+1) + n_controls*N, 1))
 ubx = ca.DM.zeros((n_states*(N+1) + n_controls*N, 1))
 
-lbx[0: n_states*(N+1): n_states] = -2     # X lower bound
-lbx[1: n_states*(N+1): n_states] = -1     # Y lower bound
+
+
+lbx[0: n_states*(N+1): n_states] = -ca.inf     # X lower bound
+lbx[1: n_states*(N+1): n_states] = -ca.inf     # Y lower bound
 lbx[2: n_states*(N+1): n_states] = -ca.inf     # theta lower bound
 
-ubx[0: n_states*(N+1): n_states] = 2      # X upper bound
-ubx[1: n_states*(N+1): n_states] = 2      # Y upper bound
+ubx[0: n_states*(N+1): n_states] = ca.inf      # X upper bound
+ubx[1: n_states*(N+1): n_states] = ca.inf      # Y upper bound
 ubx[2: n_states*(N+1): n_states] = ca.inf      # theta upper bound
+
+'''
+
+lbx[0: n_states*(N+1): n_states] = 0.5     # X lower bound
+lbx[1: n_states*(N+1): n_states] = 0.1     # Y lower bound
+lbx[2: n_states*(N+1): n_states] = -ca.inf     # theta lower bound
+
+ubx[0: n_states*(N+1): n_states] = 1.6      # X upper bound
+ubx[1: n_states*(N+1): n_states] = 1.3     # Y upper bound
+ubx[2: n_states*(N+1): n_states] = ca.inf      # theta upper bound
+
+'''
 
 
 lbx[3*(N+1):3*(N+1)+2*N:2] = pwm_r_min                 
@@ -296,8 +323,11 @@ if __name__ == '__main__':
 
             theta_ref=theta_target[t_predict]
 
-            u_ref= sqrt( (49*pi**2*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000 ) 
-            omega_ref=((49*pow(pi,3)*cos((pi*t_predict)/50)*sin((pi*t_predict)/100))/50000000 - (49*pow(pi,3)*cos((pi*t_predict)/100)*sin((pi*t_predict)/50))/25000000)/((49*pow(pi,2)*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000)
+            u_ref=sqrt( (pi**2*cos((pi*t_predict)/15)**2)/900 + (pi**2*cos((pi*t_predict)/30)**2)/3600 )
+
+            omega_ref=( ((pi**3*cos((pi*t_predict)/15)*sin((pi*t_predict)/30))/54000 - 
+                        (pi**3*cos((pi*t_predict)/30)*sin((pi*t_predict)/15))/27000)/((pi**2*cos((pi*t_predict)/15)**2)/900 + 
+                        (pi**2*cos((pi*t_predict)/30)**2)/3600) )
 
             right_pwm_ref= math.floor((158/4)*((1/(2*r))*(2*u_ref+l*omega_ref))+97) # in pwm
             left_pwm_ref= math.floor((156/4)*((1/(2*r))*(2*u_ref-l*omega_ref))+91) # in  pwm
@@ -345,16 +375,16 @@ if __name__ == '__main__':
 
 
         t0, state_init, u0,theta,neg= vehicle_pwm.vehicle(step_horizon, t0, u,theta ,neg)
-        print("x:",state_init[0],"y:",state_init[1],"theta:",state_init[2]*(180/pi))
-        print("x_ref:",x_ref,"y_ref:",y_ref,"theta_ref:",theta_ref*(180/pi))
+        #print("x:",state_init[0],"y:",state_init[1],"theta:",state_init[2]*(180/pi))
+        #print("x_ref:",x_ref,"y_ref:",y_ref,"theta_ref:",theta_ref*(180/pi))
 
 
         xx[:,mpc_iter]=state_init.T
         cat_controls[:,mpc_iter] = ca.DM.full(u0[:,0]).T
         cat_states[:,mpc_iter] = state_init.T
-        target_states[0,mpc_iter]= x_ref
-        target_states[1,mpc_iter]= y_ref
-        target_states[2,mpc_iter]= theta_ref
+        target_states[0,mpc_iter]= x_target[mpc_iter]
+        target_states[1,mpc_iter]= y_target[mpc_iter]
+        target_states[2,mpc_iter]= theta_target[mpc_iter]
 
 
         # print(X0)
@@ -380,6 +410,11 @@ if __name__ == '__main__':
     print('Total time: ', main_loop_time - main_loop)
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
+    MSE = np.square(np.subtract(xx[0],x_target[0:sim_time])).mean()+np.square(np.subtract(xx[1],y_target[0:sim_time])).mean() 
+    +np.square(np.subtract(xx[2],theta_target[0:sim_time])).mean() 
+    RMSE = math.sqrt(MSE)
+    print("Root Mean Square Error:\n",RMSE)
+
     np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
     np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/target_states.csv", target_states.T , delimiter="," , header='x,y,theta',comments='')
 
@@ -403,16 +438,20 @@ if __name__ == '__main__':
     plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/controls.png')
 
     #=======================States=============================
+    n=np.arange(1,sim_time+1)
     plt.figure(3)
     plt.subplot(311)
-    plt.plot(cat_states[0], color="orange")
+    plt.plot(n,cat_states[0],n,x_target[0:sim_time])
     plt.ylabel('X')
     plt.subplot(312)
-    plt.plot(cat_states[1], color="yellow")
+    plt.plot(n,cat_states[1],n,y_target[0:sim_time])
     plt.ylabel('Y')
     plt.subplot(313)
-    plt.plot(cat_states[2], color= "red")
+    plt.plot(n,cat_states[2],n,theta_target[0:sim_time])
     plt.ylabel('Heading')
+    location = 0
+    legend_drawn_flag = True 
+    plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
     plt.suptitle("States")
     plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/States.png')
     plt.show()
