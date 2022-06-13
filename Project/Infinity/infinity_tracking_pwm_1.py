@@ -79,11 +79,12 @@ r=0.05/2 # radious
 l=0.18 # base length
 
 
-
+'''
 Bellow
 x_init = 1.10
 y_init = 0.90
 theta_init = pi/4
+'''
 
 pwm_r_max = 255; pwm_r_min= 110;
 pwm_l_max = 247; pwm_l_min = 100;
