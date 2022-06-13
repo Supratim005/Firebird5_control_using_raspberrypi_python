@@ -355,8 +355,14 @@ if __name__ == '__main__':
     print('avg iteration time: ', np.array(times).mean() * 1000, 'ms')
 
 
-    np.savetxt("States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
-    np.savetxt("target_states.csv", actual_states.T , delimiter="," , header='x,y,theta',comments='')
+    MSE = np.square(np.subtract(xx[0],x_target[0:sim_time])).mean()+np.square(np.subtract(xx[1],y_target[0:sim_time])).mean() 
+    +np.square(np.subtract(xx[2],theta_target[0:sim_time])).mean() 
+    RMSE = math.sqrt(MSE)
+    print("Root Mean Square Error:\n",RMSE)
+
+
+    np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
+    np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/target_states.csv", target_states.T , delimiter="," , header='x,y,theta',comments='')
 
     #====================Tracking============================
     plt.figure(1)
@@ -365,7 +371,7 @@ if __name__ == '__main__':
     legend_drawn_flag = True 
     plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
     plt.suptitle("Tracking")
-    plt.savefig('Tracking.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/Tracking.png')
 
     #====================Control============================
     plt.figure(2)
@@ -376,20 +382,23 @@ if __name__ == '__main__':
     plt.subplot(122)
     plt.plot(cat_controls[0], color="yellow")
     plt.xlabel('Right_pwm')
-    plt.savefig('controls.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/controls.png')
 
     #=======================States=============================
+    n=np.arange(1,sim_time+1)
     plt.figure(3)
     plt.subplot(311)
-    plt.plot(cat_states[0], color="orange")
+    plt.plot(n,cat_states[0],n,x_target[0:sim_time])
     plt.ylabel('X')
     plt.subplot(312)
-    plt.plot(cat_states[1], color="yellow")
+    plt.plot(n,cat_states[1],n,y_target[0:sim_time])
     plt.ylabel('Y')
     plt.subplot(313)
-    plt.plot(cat_states[2], color= "red")
+    plt.plot(n,cat_states[2],n,theta_target[0:sim_time])
     plt.ylabel('Heading')
+    location = 0
+    legend_drawn_flag = True 
+    plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
     plt.suptitle("States")
-    plt.savefig('States.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/States.png')
     plt.show()
-    
