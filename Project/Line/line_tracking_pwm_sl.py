@@ -51,8 +51,8 @@ x_init = 1.10
 y_init = 0.90
 theta_init = pi/4
 '''
-pwm_r_max = 255; pwm_r_min= 97;
-pwm_l_max = 247; pwm_l_min = 91;
+pwm_r_max = 255; pwm_r_min= 110;
+pwm_l_max = 247; pwm_l_min = 100;
 
 
 
@@ -87,15 +87,16 @@ states = ca.vertcat(
     theta
 )
 n_states = states.numel()
+
 # control symbolic variables
-v = ca.SX.sym('pwm_r')
+
+v = ca.SX.sym('vpwm_r')
 omega = ca.SX.sym('pwm_l')
 controls = ca.vertcat(
     v,
     omega
 )
-n_controls = controls.numel()
-
+n_controls= controls.numel()
 
 # matrix containing all states over all time steps +1 (each column is a state vector)
 X = ca.SX.sym('X', n_states, N + 1)
@@ -128,25 +129,24 @@ rl = ca.vertcat(
 
 #con= 3.8/255 #( 3.8 rad/sec /255)
 con=ca.vertcat(
-    ca.horzcat(4/158),
-    ca.horzcat(4/156)
+    ca.horzcat(4/145),
+    ca.horzcat(4/147)
 )
 
 con1=ca.vertcat(
-    ca.horzcat(97),
-    ca.horzcat(91)
+    ca.horzcat(110),
+    ca.horzcat(100)
 )
 
 
 
 # Euler discretization
 #RHS = con*(controls-con1)
-RHS=phi @ (rl@(con * (controls-con1))) # "*: for elementwise @: for matrix"
+RHS=phi @ (rl@(con * (controls-con1)))
 
+#print(RHS)
 
-# maps controls from [va, vb].T to [vx, vy, omega].T
 f = ca.Function('f', [states, controls], [RHS])
-
 
 cost_fn = 0  # cost function
 g = X[:, 0] - P[:n_states]  # constraints in the equation
@@ -197,14 +197,13 @@ solver = ca.nlpsol('solver', 'ipopt', nlp_prob, opts)
 lbx = ca.DM.zeros((n_states*(N+1) + n_controls*N, 1))
 ubx = ca.DM.zeros((n_states*(N+1) + n_controls*N, 1))
 
-lbx[0: n_states*(N+1): n_states] = -2     # X lower bound
-lbx[1: n_states*(N+1): n_states] = -2     # Y lower bound
+lbx[0: n_states*(N+1): n_states] = -ca.inf     # X lower bound
+lbx[1: n_states*(N+1): n_states] = -ca.inf     # Y lower bound
 lbx[2: n_states*(N+1): n_states] = -ca.inf     # theta lower bound
 
-ubx[0: n_states*(N+1): n_states] = 2      # X upper bound
-ubx[1: n_states*(N+1): n_states] = 2      # Y upper bound
+ubx[0: n_states*(N+1): n_states] = ca.inf      # X upper bound
+ubx[1: n_states*(N+1): n_states] = ca.inf      # Y upper bound
 ubx[2: n_states*(N+1): n_states] = ca.inf      # theta upper bound
-
 
 lbx[3*(N+1):3*(N+1)+2*N:2] = pwm_r_min                 
 lbx[3*(N+1)+1:3*(N+1)+2*N:2] = pwm_r_min                 
@@ -361,6 +360,7 @@ if __name__ == '__main__':
     print("Root Mean Square Error:\n",RMSE)
 
 
+    np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/control.csv", cat_controls.T , delimiter="," , header='pwm_r,pwm_l',comments='')
     np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/States.csv", cat_states.T , delimiter="," , header='x,y,theta',comments='')
     np.savetxt("/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/target_states.csv", target_states.T , delimiter="," , header='x,y,theta',comments='')
 
