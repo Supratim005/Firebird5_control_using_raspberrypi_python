@@ -30,7 +30,7 @@ def plot():
   y2 = target[0:71]['y']
   theta2 = target[0:71]['theta']
 
-  MSE = np.square(np.subtract(x1,x2)).mean()+np.square(np.subtract(y1,y2)).mean()+np.square(np.subtract(theta1,theta2)).mean() 
+  MSE = np.square(np.subtract(x1,x2)).mean()+np.square(np.subtract(y1,y2)).mean() 
   RMSE = math.sqrt(MSE)
   print("Root Mean Square Error:\n")
   print(RMSE)
