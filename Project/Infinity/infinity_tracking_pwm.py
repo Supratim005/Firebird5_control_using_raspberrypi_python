@@ -39,7 +39,7 @@ GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time = 60      # simulation time
+sim_time = 76      # simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -53,19 +53,19 @@ sqrt=math.sqrt
 #x_target=1.1+0.7*sin((2*pi/200)*t_tra);
 #y_target=0.8+0.7*sin((4*pi/200)*t_tra);
 #theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
-x_target=1.1+0.5*sin((2*pi/60)*t_tra);
-y_target=0.7+0.5*sin((4*pi/60)*t_tra);
-theta_target=np.unwrap( atan2(2*pi*cos((pi*t_tra)/15), pi*cos((pi*t_tra)/30)) );
+x_target=1.1+0.5*sin((2*pi/75)*t_tra);
+y_target=0.7+0.5*sin((4*pi/75)*t_tra);
+theta_target=np.unwrap( atan2(2*pi*cos((4*pi*t_tra)/75), pi*cos((2*pi*t_tra)/75)));
 #====================================================================================================================================================================================
 
 #============================================================Sytem variables========================================================================================================================
 # setting matrix_weights' variables
 
-Q_x = 60000000000
-Q_y = 10000000000
-Q_theta = 3000000
-R1 = 0.1
-R2 = 0.01
+Q_x = 60000000
+Q_y = 10000000
+Q_theta = 300000
+R1 = 0.01
+R2 = 0.0001
 
 '''
 Q_x = 60000
@@ -323,11 +323,11 @@ if __name__ == '__main__':
 
             theta_ref=theta_target[t_predict]
 
-            u_ref=sqrt( (pi**2*cos((pi*t_predict)/15)**2)/900 + (pi**2*cos((pi*t_predict)/30)**2)/3600 )
-
-            omega_ref=( ((pi**3*cos((pi*t_predict)/15)*sin((pi*t_predict)/30))/54000 - 
-                        (pi**3*cos((pi*t_predict)/30)*sin((pi*t_predict)/15))/27000)/((pi**2*cos((pi*t_predict)/15)**2)/900 + 
-                        (pi**2*cos((pi*t_predict)/30)**2)/3600) )
+            u_ref=sqrt( (pi**2*cos((2*pi*t_predict)/75)**2)/5625 + (4*pi**2*cos((4*pi*t_predict)/75)**2)/5625)
+            
+            omega_ref=( -((8*pi**3*cos((2*pi*t_predict)/75)*sin((4*pi*t_predict)/75))/421875 - 
+                (4*pi**3*cos((4*pi*t_predict)/75)*sin((2*pi*t_predict)/75))/421875)/((pi**2*cos((2*pi*t_predict)/75)**2)/5625 + 
+                (4*pi**2*cos((4*pi*t_predict)/75)**2)/5625) )
 
             right_pwm_ref= math.floor((158/4)*((1/(2*r))*(2*u_ref+l*omega_ref))+97) # in pwm
             left_pwm_ref= math.floor((156/4)*((1/(2*r))*(2*u_ref-l*omega_ref))+91) # in  pwm
