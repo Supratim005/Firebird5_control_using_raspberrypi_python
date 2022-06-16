@@ -8,7 +8,7 @@ import math
 
 def plot():
 
-  n=np.arange(1,25)
+  n=np.arange(1,26)
 
 
 
@@ -41,18 +41,21 @@ def plot():
   legend_drawn_flag = True 
   plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
   plt.suptitle("Tracking")
+  plt.ylabel('Y(meter)')
+  plt.xlabel('X(meter)')
   plt.savefig('Tracking.png')
 
   plt.figure(2)
   plt.subplot(311)
   plt.plot(n,x1,n,x2)
-  plt.ylabel('X')
+  plt.ylabel('X(meter)')
   plt.subplot(312)
   plt.plot(n,y1,n,y2)
-  plt.ylabel('Y')
+  plt.ylabel('Y(meter)')
   plt.subplot(313)
   plt.plot(n,theta1,n,theta2)
-  plt.ylabel('Heading')
+  plt.ylabel('Heading (radian)')
+  plt.xlabel('time (sec)')
 
   location = 0
   legend_drawn_flag = True 
