@@ -20,7 +20,7 @@ while True:
     #print("Accelerometer (m/s^2): {}".format(sensor.acceleration))
     #print("Magnetometer (microteslas): {}".format(sensor.magnetic))
     #print("Gyroscope (rad/sec): {}".format(sensor.gyro))
-    print("Euler angle: {}".format(sensor.euler[0]))
+    print("Heading angle: {}".format(sensor.euler[0]))
     #print("Quaternion: {}".format(sensor.quaternion))
     #print("Linear acceleration (m/s^2): {}".format(sensor.linear_acceleration))
     #print("Gravity (m/s^2): {}".format(sensor.gravity))
