@@ -163,8 +163,8 @@ rl = ca.vertcat(
 
 #con= 3.8/255 #( 3.8 rad/sec /255)
 con=ca.vertcat(
-    ca.horzcat(4/145),
-    ca.horzcat(4/147)
+    ca.horzcat(4.5/145),
+    ca.horzcat(4.5/147)
 )
 
 con1=ca.vertcat(
