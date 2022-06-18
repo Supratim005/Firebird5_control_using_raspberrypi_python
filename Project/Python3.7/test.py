@@ -47,9 +47,9 @@ while True:
 		#pi.velocity(0,x,2)
 		#actuator.control_ip(0.0152,0.1815,.05,0.18)
 		#time.sleep(1)
-		#pi.velocity(0,255,1)
+		pi.velocity(247,255,1)
 		#time.sleep(3)
-		pi.velocity(247,0,1)
+		#pi.velocity(247,0,1)
 		#actuator.control_ip(0.0352400516511952,0.329161446487067,0.05,0.18)
 		time.sleep(1)
 		

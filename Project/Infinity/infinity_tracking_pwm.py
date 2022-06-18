@@ -434,8 +434,8 @@ if __name__ == '__main__':
     location = 0 # For the best location
     legend_drawn_flag = True 
     plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
-    plt.ylabel('Y(meter)')
-    plt.xlabel('X(meter)')
+    plt.ylabel('Y (meter)')
+    plt.xlabel('X (meter)')
     plt.suptitle("Tracking")
     plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Infinity/Tracking.png')
 
@@ -455,13 +455,13 @@ if __name__ == '__main__':
     plt.figure(3)
     plt.subplot(311)
     plt.plot(n,cat_states[0],n,x_target[0:sim_time])
-    plt.ylabel('X(meter)')
+    plt.ylabel('X (meter)')
     plt.subplot(312)
     plt.plot(n,cat_states[1],n,y_target[0:sim_time])
-    plt.ylabel('Y(meter)')
+    plt.ylabel('Y (meter)')
     plt.subplot(313)
     plt.plot(n,cat_states[2],n,theta_target[0:sim_time])
-    plt.ylabel('Heading(radian)')
+    plt.ylabel('Heading (radian)')
     plt.xlabel('time (sec)')
     location = 0
     legend_drawn_flag = True 
