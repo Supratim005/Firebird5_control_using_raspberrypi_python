@@ -327,13 +327,14 @@ if __name__ == '__main__':
             y_ref=y_target[t_predict]
 
             theta_ref=theta_target[t_predict]
-'''
+            '''
             u_ref=sqrt( (pi**2*cos((2*pi*t_predict)/75)**2)/5625 + (4*pi**2*cos((4*pi*t_predict)/75)**2)/5625)
             
             omega_ref=( -((8*pi**3*cos((2*pi*t_predict)/75)*sin((4*pi*t_predict)/75))/421875 - 
                 (4*pi**3*cos((4*pi*t_predict)/75)*sin((2*pi*t_predict)/75))/421875)/((pi**2*cos((2*pi*t_predict)/75)**2)/5625 + 
                 (4*pi**2*cos((4*pi*t_predict)/75)**2)/5625) )
-'''                     
+            ''' 
+                                
             u_ref=sqrt( (pi**2*cos((pi*t_predict)/10)**2)/400 + (pi**2*cos((pi*t_predict)/20)**2)/1600 )
             omega_ref=( ((pi**3*cos((pi*t_predict)/10)*sin((pi*t_predict)/20))/16000 - 
                     (pi**3*cos((pi*t_predict)/20)*sin((pi*t_predict)/10))/8000)/((pi**2*cos((pi*t_predict)/10)**2)/400 +
