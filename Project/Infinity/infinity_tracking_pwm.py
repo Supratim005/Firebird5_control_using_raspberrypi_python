@@ -39,7 +39,7 @@ GPS=serial.Serial('/dev/ttyACM0',19200) # For the GPS'''
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time = 76      # simulation time
+sim_time = 41      # simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -334,7 +334,7 @@ if __name__ == '__main__':
                 (4*pi**3*cos((4*pi*t_predict)/75)*sin((2*pi*t_predict)/75))/421875)/((pi**2*cos((2*pi*t_predict)/75)**2)/5625 + 
                 (4*pi**2*cos((4*pi*t_predict)/75)**2)/5625) )
             ''' 
-                                
+
             u_ref=sqrt( (pi**2*cos((pi*t_predict)/10)**2)/400 + (pi**2*cos((pi*t_predict)/20)**2)/1600 )
             omega_ref=( ((pi**3*cos((pi*t_predict)/10)*sin((pi*t_predict)/20))/16000 - 
                     (pi**3*cos((pi*t_predict)/20)*sin((pi*t_predict)/10))/8000)/((pi**2*cos((pi*t_predict)/10)**2)/400 +
