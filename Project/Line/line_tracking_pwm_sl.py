@@ -16,7 +16,7 @@ pi.serial_open() # To serial access the avr board
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time =30#simulation time
+sim_time =25#simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -38,7 +38,7 @@ theta_target=np.zeros(sim_time+N);
 #============================================================Sytem variables========================================================================================================================
 # setting matrix_weights' variables
 Q_x = 100
-Q_y = 300000
+Q_y = 30000000000
 Q_theta =200
 R1 =0.01
 R2 =0.05
