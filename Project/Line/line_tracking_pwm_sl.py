@@ -16,7 +16,7 @@ pi.serial_open() # To serial access the avr board
 
 step_horizon = 1    #sampling freq
 N = 10              # number of look ahead steps
-sim_time =25#simulation time
+sim_time =30#simulation time
 
 t_tra=np.arange(0,sim_time+N,step_horizon)
 
@@ -384,7 +384,7 @@ if __name__ == '__main__':
     plt.subplot(122)
     plt.plot(cat_controls[0], color="yellow")
     plt.xlabel('Right_pwm')
-    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/controls.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/lcontrols.png')
 
     #=======================States=============================
     n=np.arange(1,sim_time+1)
@@ -403,5 +403,5 @@ if __name__ == '__main__':
     legend_drawn_flag = True 
     plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
     plt.suptitle("States")
-    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/States.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/lStates.png')
     plt.show()
