@@ -8,12 +8,12 @@ import math
 
 def plot():
 
-  n=np.arange(1,19)
+  n=np.arange(1,42)
 
 
 
-  actual = pd.read_csv("States_1.csv")
-  target =pd.read_csv("target_states_1.csv")
+  actual = pd.read_csv("States.csv")
+  target =pd.read_csv("target_states.csv")
   x1 = []
   y1 = []
   theta1=[]
@@ -41,17 +41,17 @@ def plot():
   legend_drawn_flag = True 
   plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
   plt.suptitle("Tracking")
-  plt.ylabel('Y(meter)')
-  plt.xlabel('X(meter)')
-  plt.savefig('Tracking.png')
+  plt.ylabel('Y (meter)')
+  plt.xlabel('X (meter)')
+  plt.savefig('iTracking.png')
 
   plt.figure(2)
   plt.subplot(311)
   plt.plot(n,x1,n,x2)
-  plt.ylabel('X(meter)')
+  plt.ylabel('X (meter)')
   plt.subplot(312)
   plt.plot(n,y1,n,y2)
-  plt.ylabel('Y(meter)')
+  plt.ylabel('Y (meter)')
   plt.subplot(313)
   plt.plot(n,theta1,n,theta2)
   plt.ylabel('Heading (radian)')
@@ -61,7 +61,7 @@ def plot():
   legend_drawn_flag = True 
   plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
   plt.suptitle("States")
-  plt.savefig('States.png')
+  plt.savefig('iStates.png')
 
   plt.show()
 

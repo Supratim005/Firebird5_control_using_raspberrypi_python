@@ -30,7 +30,7 @@ sqrt=math.sqrt
 #x_target=1.1+0.7*sin((2*pi/200)*t_tra);
 #y_target=0.9+0.7*sin((4*pi/200)*t_tra);
 #theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
-x_target=0.15*t_tra;
+x_target=0.25*t_tra;
 y_target=np.ones(sim_time+N);
 theta_target=np.zeros(sim_time+N);
 #====================================================================================================================================================================================
@@ -129,8 +129,8 @@ rl = ca.vertcat(
 
 #con= 3.8/255 #( 3.8 rad/sec /255)
 con=ca.vertcat(
-    ca.horzcat(4/145),
-    ca.horzcat(4/147)
+    ca.horzcat(10/145),
+    ca.horzcat(10/147)
 )
 
 con1=ca.vertcat(
@@ -264,7 +264,7 @@ if __name__ == '__main__':
 
             t_predict=current_time+k-1
 
-            x_ref=0.15*t_predict
+            x_ref=0.25*t_predict
 
             y_ref=1
 
@@ -366,12 +366,14 @@ if __name__ == '__main__':
 
     #====================Tracking============================
     plt.figure(1)
-    plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time]) 
+    plt.plot(xx[0],xx[1],x_target[0:sim_time],y_target[0:sim_time])
     location = 0 # For the best location
     legend_drawn_flag = True 
     plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
+    plt.ylabel('Y(meter)')
+    plt.xlabel('X(meter)')
     plt.suptitle("Tracking")
-    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/Tracking.png')
+    plt.savefig('/home/pi/Firebird5_control_using_raspberrypi_python/Project/Line/lTracking.png')
 
     #====================Control============================
     plt.figure(2)
@@ -389,13 +391,14 @@ if __name__ == '__main__':
     plt.figure(3)
     plt.subplot(311)
     plt.plot(n,cat_states[0],n,x_target[0:sim_time])
-    plt.ylabel('X')
+    plt.ylabel('X(meter)')
     plt.subplot(312)
     plt.plot(n,cat_states[1],n,y_target[0:sim_time])
-    plt.ylabel('Y')
+    plt.ylabel('Y(meter)')
     plt.subplot(313)
     plt.plot(n,cat_states[2],n,theta_target[0:sim_time])
-    plt.ylabel('Heading')
+    plt.ylabel('Heading(radian)')
+    plt.xlabel('time (sec)')
     location = 0
     legend_drawn_flag = True 
     plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
