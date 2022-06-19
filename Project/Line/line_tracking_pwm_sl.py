@@ -30,7 +30,7 @@ sqrt=math.sqrt
 #x_target=1.1+0.7*sin((2*pi/200)*t_tra);
 #y_target=0.9+0.7*sin((4*pi/200)*t_tra);
 #theta_target=np.unwrap(atan2(2*pi*cos((pi*t_tra)/50), pi*cos((pi*t_tra)/100)));
-x_target=0.25*t_tra;
+x_target=0.15*t_tra;
 y_target=np.ones(sim_time+N);
 theta_target=np.zeros(sim_time+N);
 #====================================================================================================================================================================================
@@ -38,7 +38,7 @@ theta_target=np.zeros(sim_time+N);
 #============================================================Sytem variables========================================================================================================================
 # setting matrix_weights' variables
 Q_x = 100
-Q_y = 30000000000
+Q_y = 300000
 Q_theta =200
 R1 =0.01
 R2 =0.05
@@ -264,7 +264,7 @@ if __name__ == '__main__':
 
             t_predict=current_time+k-1
 
-            x_ref=0.25*t_predict
+            x_ref=0.15*t_predict
 
             y_ref=1
 
@@ -273,7 +273,7 @@ if __name__ == '__main__':
             #u_ref= sqrt( (49*pi**2*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000 ) 
             #omega_ref=((49*pow(pi,3)*cos((pi*t_predict)/50)*sin((pi*t_predict)/100))/50000000 - (49*pow(pi,3)*cos((pi*t_predict)/100)*sin((pi*t_predict)/50))/25000000)/((49*pow(pi,2)*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000)
 
-            u_ref=0.25
+            u_ref=0.15
 
             omega_ref=0
 
