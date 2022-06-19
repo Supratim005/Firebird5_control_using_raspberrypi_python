@@ -273,7 +273,7 @@ if __name__ == '__main__':
             #u_ref= sqrt( (49*pi**2*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000 ) 
             #omega_ref=((49*pow(pi,3)*cos((pi*t_predict)/50)*sin((pi*t_predict)/100))/50000000 - (49*pow(pi,3)*cos((pi*t_predict)/100)*sin((pi*t_predict)/50))/25000000)/((49*pow(pi,2)*cos((pi*t_predict)/50)**2)/250000 + (49*pi**2*cos((pi*t_predict)/100)**2)/1000000)
 
-            u_ref=0.15
+            u_ref=0.25
 
             omega_ref=0
 
