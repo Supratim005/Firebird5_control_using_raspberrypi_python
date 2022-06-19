@@ -8,12 +8,12 @@ import math
 
 def plot():
 
-  n=np.arange(1,19)
+  n=np.arange(1,26)
 
 
 
-  actual = pd.read_csv("States_1.csv")
-  target =pd.read_csv("target_states_1.csv")
+  actual = pd.read_csv("States.csv")
+  target =pd.read_csv("target_states.csv")
   x1 = []
   y1 = []
   theta1=[]
@@ -30,10 +30,9 @@ def plot():
   y2 = target[0:71]['y']
   theta2 = target[0:71]['theta']
 
-  MSE = np.square(np.subtract(theta1,theta2)).mean() 
+  MSE = np.square(np.subtract(x1,x2)).mean()+np.square(np.subtract(y1,y2)).mean()
   RMSE = math.sqrt(MSE)
-  print("Root Mean Square Error:\n")
-  print(RMSE)
+  print("Root Mean Square Error:\n",RMSE)
 
   plt.figure(1)
   plt.plot(x1,y1,x2,y2) 
@@ -41,9 +40,9 @@ def plot():
   legend_drawn_flag = True 
   plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
   plt.suptitle("Tracking")
-  plt.ylabel('Y(meter)')
+  plt.ylabel('Y (meter)')
   plt.xlabel('X(meter)')
-  plt.savefig('Tracking.png')
+  #plt.savefig('smiTracking.png')
 
   plt.figure(2)
   plt.subplot(311)
@@ -61,7 +60,7 @@ def plot():
   legend_drawn_flag = True 
   plt.legend(["Actual", "Target"], loc=0, frameon=legend_drawn_flag)
   plt.suptitle("States")
-  plt.savefig('States.png')
+  #plt.savefig('smiStates.png')
 
   plt.show()
 
